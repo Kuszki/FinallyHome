@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+    
+    <PreferenceCategory
+            android:title="Connect Settings">
+            
+    <EditTextPreference 
+        android:title="Set IP" 
+        android:dialogMessage="Example: 192.168.1.12" 
+        android:dialogTitle="Serwer IP" 
+        android:key="set_ip_preference"/>
+    
+    
+    <EditTextPreference 
+    	android:title="Set PORT" 
+        android:dialogMessage="Sugested: 9096" 
+        android:dialogTitle="Serwer PORT" 
+        android:key="set_port_preference"/>
+        
+    </PreferenceCategory>
+
+</PreferenceScreen>
