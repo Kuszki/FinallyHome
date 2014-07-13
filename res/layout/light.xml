@@ -1,0 +1,87 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/ic_background"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".LightActivity" >
+
+    <TextView
+        android:id="@+id/textView_light_intesity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/light_intensity"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <SeekBar
+        android:id="@+id/SeekBar_light_intensity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp" />
+
+    <TextView
+        android:id="@+id/textView_light"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="115dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="140dp"
+        android:text="Actuall value:"
+        android:textSize="25sp" />
+
+    <Switch
+        android:id="@+id/switch_light"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:text="On/Off:"
+        android:textOff="OFF"
+        android:textOn="ON" />
+
+    <TextView
+        android:id="@+id/textView_room"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="250dp"
+        android:text="Large Text"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <Button
+        android:id="@+id/buttonOkLight"
+        android:layout_width="79dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="250dp"
+        android:layout_marginTop="180dp"
+        android:text="Ok" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="300dp"
+        android:layout_marginTop="140dp"
+        android:text="%"
+        android:textSize="25sp" />
+
+    <TextView
+        android:id="@+id/textView_light_intensity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="270dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="140dp"
+        android:text="0"
+        android:textSize="25sp" />
+    
+    <TextView
+        android:id="@+id/textView_response"
+        android:layout_width="284dp"
+        android:layout_height="158dp" />
+
+</FrameLayout>
