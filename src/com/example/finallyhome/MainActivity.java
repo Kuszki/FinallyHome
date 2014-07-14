@@ -32,6 +32,7 @@ String my_set_ip_preference;
 String my_set_port_preference;
 InputStream inputStream;
 byte[] buffer;
+SocketService mBoundService;
 
 /******************************************************************************/
 @Override
