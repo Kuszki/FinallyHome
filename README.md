@@ -1,6 +1,5 @@
 FinallyHome
 ===========
+dodalem galaz z czystym kodem tym co mi dales, tylko po wyczyszczeniu warningow i doprowadzeniu go do stanu kompilacyjnego
 
-Praca inżynierska Paweł
-===========
-wgralem tutaj to co mi dales, jak ogarne eclipsa to zaczne sie z tym bawic
+galaz master jest rozwijana, wgralem juz do niej obsluge socketow... troche to podrasuje jak mi sie bedzie nudzic i zaczne testowac
