@@ -2,7 +2,12 @@ package com.example.finallyhome;
 
 // TEST
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,6 +31,8 @@ String my_set_ip_preference;
 String my_set_port_preference;
 InputStream inputStream;
 byte[] buffer;
+
+Socket socket;
 
 ConnectSocket client = new ConnectSocket(this);
 
@@ -107,9 +114,12 @@ protected void onCreate(Bundle savedInstanceState) {
 		    switch (item.getItemId()) {
 		    case R.id.action_connect:
 		    	//Connect the socket with server
-		 
-				if(connectOn)
-					Toast.makeText(MainActivity.this, "Application is connected", Toast.LENGTH_LONG).show();
+		    	
+		    	client.Connect();
+		    	//client.Send("test");
+		    	
+				//if(connectOn)
+					//Toast.makeText(MainActivity.this, "Application is connected", Toast.LENGTH_LONG).show();
 			
 		      break;
 		    case R.id.action_disconnect:

@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Dictionary;
@@ -24,13 +25,8 @@ public class ConnectSocket {
 	 * na spoko zrobic jeden globalny obiekt - bez znaczenia
 	 */
 	
-	protected Context cContext;
-	
-	// to jest mechanizm do obslugi zadan
-	protected static Handler handler = new Handler();
-	
 	// gniazdo
-	protected static Socket socket;
+	protected static Socket socket = null;
 	
 	//dane do polaczenia
 	protected static String sAddr = "10.0.0.100";
@@ -46,19 +42,46 @@ public class ConnectSocket {
 	 */
 	
 	// to beda strumienie na wejscie i wyjscie
-	protected static PrintWriter out;
-	protected static BufferedReader in;
+	protected static PrintWriter out = null;
+	protected static BufferedReader in = null;
 	
 	// mapka na wartosci naszych pol - klucz String i pola Float
-	protected static Dictionary<String, Float> Values;
+	protected static Dictionary<String, Float> Values = null;
 	
-	// to ma byc zadanie obslugujace przychodzace tresci
-	protected final Runnable task = new Runnable() {
-		
-		@Override
-		public void run() {
+	protected static Context context = null;
+	
+	protected static Thread sockThread = new Thread()
+	{
+		public void run()
+		{
+			try {
+		    	
+	    		socket = new Socket(InetAddress.getByName(sAddr), iPort);
+	    		out = new PrintWriter(socket.getOutputStream());
+	    		in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+	    		out.flush();
+	    		
+	    	} catch (UnknownHostException e) {
+	    		
+	    		e.printStackTrace();
+	    		Log.d("connection", "Unknown host");
+	    		
+	    	} catch (IOException e) {
 			
-			while (true) if (socket.isConnected()){
+				e.printStackTrace();
+				Log.d("io", "Unknown IO exeption");
+	    	
+	    	}
+	    };
+	};
+	
+	protected static Thread recvThread = new Thread()
+	{
+		public void run()
+		{
+			//if (socket != null) while (socket.isConnected()) {
+			while (true){
 				
 				String msg = null;
 				
@@ -74,9 +97,9 @@ public class ConnectSocket {
 					
 				}
 				
-	    		if(msg == null) break; else {
+	    		if (msg != null) {
 
-	    			Toast.makeText(cContext, msg, Toast.LENGTH_LONG).show();
+	    			//Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
 	    			
 	    			/* TODO tutaj ma byc obsluga zdarzen przychodzacych
 					 * 
@@ -92,19 +115,15 @@ public class ConnectSocket {
 					 */
 	    			
 	    		}
-				
 			}
-			
-		}
+		};
 	};
 	
 	// konstruktor, on ma zbudowac liste gdyby jej nie bylo
 	public ConnectSocket(Context c)
 	{
 		
-		cContext = c;
-		
-		if (Values.isEmpty()) {
+		//if (Values.isEmpty()) {
 		
 		/* TODO trzeba tutaj zrobic liste zmiennych wystepujacych w 
 		 * ustawieniach programu
@@ -121,16 +140,14 @@ public class ConnectSocket {
 		 * globalna i robiona tylko przy pierwszym instancjowaniu
 		 */
 			
-		}
+		//}
 		
-		// DEBUG
-		Connect();
-		Send("trollo");
+		context = c;
 		
 	}
 
 	// do polaczenia
-    public int Connect()
+    public void Connect()
     {
 
     	/* TODO ogarnac motyw zeby sie sam zrobil watek sluchajacy
@@ -143,59 +160,32 @@ public class ConnectSocket {
     	 * zrobiona i da sie z tego wiele wywnioskowac
     	 */
     	
-    	int iError = 0;
-    	
-    	if (socket.isClosed()) try {
-    	
-    		socket = new Socket(sAddr, iPort);
-    		out = new PrintWriter(socket.getOutputStream());
-    		in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-
-    		out.flush();
-    		
-    	} catch (UnknownHostException e) {
-    		
-    		e.printStackTrace();
-    		Log.d("connection", "Unknown host");
-    		
-    		iError = 1;
-    		
-    	} catch (IOException e) {
-		
-			e.printStackTrace();
-			Log.d("io", "Unknown IO exeption");
-			
-			iError = 2;
+    	if (!sockThread.isAlive()){
+    		sockThread.start();
+    		recvThread.start();
     	}
     	
-    	return iError;
-    }
-    
-    // chuj wi do czego, raczej wywale to gdzies indziej
-    protected int RecvThreadRun()
-    {
+    	Send("siema szmato");
     	
-    	/* TODO to gowno trzeba chyba wrzucic gdzies indziej
-    	 * 
-    	 * nie ma chyba sensu dawac tego tutaj, bo to w sumie 
-    	 * jest jedna mala linijeczka. raczej to wsadze do 
-    	 * ConnectSocket::Connect() bo to bedzie lepiej chyba
-    	 */
+    	//Toast.makeText(context, "polaczony!", Toast.LENGTH_LONG).show();
     	
-    	handler.post(task);
-    	
-    	return 0;
     }
     
     // do wysylania polecen
     public void Send(String str)
     {
-		
-    	out.println(str);
+		final String message = str;
     	
-    	Log.d("connection", "message \"" + str + "\" send");
-    	
-    	out.flush();
+    	new Thread(new Runnable()
+    	{
+			public void run()
+			{
+				out.print(message);
+				Log.d("connection", "message \"" + message + "\" send");
+		    	
+		    	out.flush();
+			}
+    	}).start();
 
     }
 }
