@@ -26,7 +26,8 @@ String my_set_ip_preference;
 String my_set_port_preference;
 InputStream inputStream;
 byte[] buffer;
-SocketService mBoundService;
+
+ConnectSocket client = new ConnectSocket(this);
 
 /******************************************************************************/
 @Override
@@ -40,7 +41,6 @@ protected void onCreate(Bundle savedInstanceState) {
 	textResponse = (TextView)findViewById(R.id.response);
 	 
 	loadPref();
-	
 }
 /******************************************************************************/
 

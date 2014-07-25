@@ -7,8 +7,11 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Dictionary;
+
 import android.os.Handler;
 import android.util.Log;
+import android.widget.Toast;
+import android.content.Context;
 
 public class ConnectSocket {
 	
@@ -21,15 +24,17 @@ public class ConnectSocket {
 	 * na spoko zrobic jeden globalny obiekt - bez znaczenia
 	 */
 	
+	protected Context cContext;
+	
 	// to jest mechanizm do obslugi zadan
-	private Handler handler = new Handler();
+	protected static Handler handler = new Handler();
 	
 	// gniazdo
 	protected static Socket socket;
 	
 	//dane do polaczenia
-	protected static String sAddr;
-	protected static int iPort;
+	protected static String sAddr = "10.0.0.100";
+	protected static int iPort = 9096;
     
 	/* TODO ogarnac motyw czy by tego nie zrobic public
 	 * 
@@ -48,7 +53,7 @@ public class ConnectSocket {
 	protected static Dictionary<String, Float> Values;
 	
 	// to ma byc zadanie obslugujace przychodzace tresci
-	protected Runnable task = new Runnable() {
+	protected final Runnable task = new Runnable() {
 		
 		@Override
 		public void run() {
@@ -71,6 +76,8 @@ public class ConnectSocket {
 				
 	    		if(msg == null) break; else {
 
+	    			Toast.makeText(cContext, msg, Toast.LENGTH_LONG).show();
+	    			
 	    			/* TODO tutaj ma byc obsluga zdarzen przychodzacych
 					 * 
 					 * trzeba tutaj zrobic parser i interpreter calego tego syfu
@@ -92,8 +99,10 @@ public class ConnectSocket {
 	};
 	
 	// konstruktor, on ma zbudowac liste gdyby jej nie bylo
-	public ConnectSocket()
+	public ConnectSocket(Context c)
 	{
+		
+		cContext = c;
 		
 		if (Values.isEmpty()) {
 		
@@ -113,6 +122,11 @@ public class ConnectSocket {
 		 */
 			
 		}
+		
+		// DEBUG
+		Connect();
+		Send("trollo");
+		
 	}
 
 	// do polaczenia
