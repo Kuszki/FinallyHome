@@ -34,7 +34,7 @@ byte[] buffer;
 
 Socket socket;
 
-ConnectSocket client = new ConnectSocket(this);
+ConnectSocket client = new ConnectSocket(MainActivity.this);
 
 /******************************************************************************/
 @Override
@@ -124,8 +124,10 @@ protected void onCreate(Bundle savedInstanceState) {
 		      break;
 		    case R.id.action_disconnect:
 		    	
-		    	if(!connectOn)
-					Toast.makeText(MainActivity.this, "Application is disconnected", Toast.LENGTH_LONG).show();
+		    	client.Send("TEST heuheuehueh");
+		    	
+		    	/*if(!connectOn)
+					Toast.makeText(MainActivity.this, "Application is disconnected", Toast.LENGTH_LONG).show();*/
 		    	break;
 		    case R.id.action_settings:
 		    	Intent intent = new Intent();

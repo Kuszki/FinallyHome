@@ -12,6 +12,7 @@ import java.util.Dictionary;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
+import android.app.Activity;
 import android.content.Context;
 
 public class ConnectSocket {
@@ -31,25 +32,21 @@ public class ConnectSocket {
 	//dane do polaczenia
 	protected static String sAddr = "10.0.0.100";
 	protected static int iPort = 9096;
-    
-	/* TODO ogarnac motyw czy by tego nie zrobic public
-	 * 
-	 * moze i by mozna, bo wtedy by bylo mniej metod
-	 * do napisania, ale tak bedzie lepsza enkapsulacja
-	 * 
-	 * to znaczy "niech nikt mi ryja do moich streamow
-	 * nie wsadza bo jak pizne to sie naprostuje"
-	 */
 	
 	// to beda strumienie na wejscie i wyjscie
 	protected static PrintWriter out = null;
 	protected static BufferedReader in = null;
 	
 	// mapka na wartosci naszych pol - klucz String i pola Float
-	protected static Dictionary<String, Float> Values = null;
+	protected static Dictionary<String, Float> values = null;
 	
-	protected static Context context = null;
+	// DEBUG, a moze i zostanie na stale
+	protected static Activity context = null;
 	
+	// do przetwarzania instrukcji po odebraniu
+	protected static Handler handler = new Handler();
+	
+	// watek obslugujacy polaczenie
 	protected static Thread sockThread = new Thread()
 	{
 		public void run()
@@ -73,15 +70,8 @@ public class ConnectSocket {
 				Log.d("io", "Unknown IO exeption");
 	    	
 	    	}
-	    };
-	};
-	
-	protected static Thread recvThread = new Thread()
-	{
-		public void run()
-		{
-			//if (socket != null) while (socket.isConnected()) {
-			while (true){
+			
+			while (socket.isConnected()){
 				
 				String msg = null;
 				
@@ -97,33 +87,18 @@ public class ConnectSocket {
 					
 				}
 				
-	    		if (msg != null) {
-
-	    			//Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
-	    			
-	    			/* TODO tutaj ma byc obsluga zdarzen przychodzacych
-					 * 
-					 * trzeba tutaj zrobic parser i interpreter calego tego syfu
-					 * w sumie to to zadani ma hulac caly czas, jak tylko jest
-					 * polaczenie nawiazane i ma odbierac wszystko co serwer wysle.
-					 * 
-					 * TODO ogarnac czy to sie da jakos zatrzymac jak serwer padnie
-					 * 
-					 * trzeba ogarnac jak to sie zatrzymuje i kontroluje gdyby dajmy
-					 * na to server padl. mam juz w sumie plan, ale pomysle jak 
-					 * to obadac dokladnie by bylo najfajniej i kozacko
-					 */
-	    			
-	    		}
+	    		if (msg != null) Parse(msg);
+	    		
 			}
-		};
+			
+	    };
 	};
 	
 	// konstruktor, on ma zbudowac liste gdyby jej nie bylo
-	public ConnectSocket(Context c)
+	public ConnectSocket(Activity c)
 	{
 		
-		//if (Values.isEmpty()) {
+		//if (values.isEmpty()) {
 		
 		/* TODO trzeba tutaj zrobic liste zmiennych wystepujacych w 
 		 * ustawieniach programu
@@ -147,7 +122,7 @@ public class ConnectSocket {
 	}
 
 	// do polaczenia
-    public void Connect()
+    public static void Connect()
     {
 
     	/* TODO ogarnac motyw zeby sie sam zrobil watek sluchajacy
@@ -160,19 +135,15 @@ public class ConnectSocket {
     	 * zrobiona i da sie z tego wiele wywnioskowac
     	 */
     	
-    	if (!sockThread.isAlive()){
-    		sockThread.start();
-    		recvThread.start();
-    	}
+    	if (!sockThread.isAlive()) sockThread.start();
     	
-    	Send("siema szmato");
-    	
-    	//Toast.makeText(context, "polaczony!", Toast.LENGTH_LONG).show();
+    	// DEBUG
+    	Toast.makeText(context, "polaczony!", Toast.LENGTH_LONG).show();
     	
     }
     
     // do wysylania polecen
-    public void Send(String str)
+    public static void Send(String str)
     {
 		final String message = str;
     	
@@ -180,12 +151,27 @@ public class ConnectSocket {
     	{
 			public void run()
 			{
-				out.print(message);
+				out.write(message);
 				Log.d("connection", "message \"" + message + "\" send");
-		    	
-		    	out.flush();
+				
+				out.flush();
 			}
     	}).start();
 
     }
+    
+    protected static void Parse(String msg)
+	{ 
+		final String command = msg;
+	    handler.post(new Runnable() {
+			
+			@Override
+			public void run() {
+				Toast.makeText(context, command, Toast.LENGTH_LONG).show();
+			}
+			
+		});
+		
+	}
 }
+
