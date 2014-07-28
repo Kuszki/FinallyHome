@@ -10,7 +10,6 @@ import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 
-import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 import android.app.Activity;
@@ -27,7 +26,7 @@ public class ConnectSocket {
 	 */
 	
 	// gniazdo
-	protected static Socket socket = null;
+	protected static Socket socket = new Socket();
 	
 	//dane do polaczenia
 	protected static String sAddr = "10.0.0.100";
@@ -42,9 +41,6 @@ public class ConnectSocket {
 	
 	// DEBUG, a moze i zostanie na stale
 	protected static Activity context = null;
-	
-	// do przetwarzania instrukcji po odebraniu
-	protected static Handler handler = new Handler();
 	
 	// watek obslugujacy polaczenie
 	protected static Thread sockThread = new Thread()
@@ -136,6 +132,31 @@ public class ConnectSocket {
     	
     }
     
+    public static void Disconnect(String addr, int port)
+    {
+    	
+    	new Thread(new Runnable()
+    	{
+			public void run()
+			{
+				try {
+					
+					socket.close();
+					
+				} catch (IOException e) {
+
+					e.printStackTrace();
+					Log.d("io", "Unknown IO exeption");
+					
+				}
+			}
+    	}).start();
+    	
+    	// DEBUG
+    	Toast.makeText(context, "polaczony!", Toast.LENGTH_LONG).show();
+    	
+    }
+    
     // do wysylania polecen
     public static void Send(String str)
     {
@@ -145,10 +166,14 @@ public class ConnectSocket {
     	{
 			public void run()
 			{
-				out.write(message);
-				Log.d("connection", "message \"" + message + "\" send");
+				if (socket.isConnected()){
 				
-				out.flush();
+					out.write(message);
+					Log.d("connection", "message \"" + message + "\" send");
+				
+					out.flush();
+					
+				}
 			}
     	}).start();
 
@@ -157,15 +182,15 @@ public class ConnectSocket {
     protected static void Parse(String msg)
 	{ 
 		final String command = msg;
-	    handler.post(new Runnable(){
-			
-			@Override
-			public void run(){
+		
+		new Thread(new Runnable()
+    	{
+			public void run()
+			{
 				Toast.makeText(context, command, Toast.LENGTH_LONG).show();
 			}
-			
-		});
-		
+    	}).start();
+
 	}
 }
 
