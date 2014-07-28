@@ -7,13 +7,13 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.Map;
 
 import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 import android.app.Activity;
-import android.content.Context;
 
 public class ConnectSocket {
 	
@@ -38,7 +38,7 @@ public class ConnectSocket {
 	protected static BufferedReader in = null;
 	
 	// mapka na wartosci naszych pol - klucz String i pola Float
-	protected static Dictionary<String, Float> values = null;
+	protected static Map<String, Float> values = new HashMap<String, Float>();
 	
 	// DEBUG, a moze i zostanie na stale
 	protected static Activity context = null;
@@ -117,23 +117,17 @@ public class ConnectSocket {
 			
 		//}
 		
+		// referencja do kontekstu
 		context = c;
 		
 	}
 
 	// do polaczenia
-    public static void Connect()
+    public static void Connect(String addr, int port)
     {
-
-    	/* TODO ogarnac motyw zeby sie sam zrobil watek sluchajacy
-    	 * 
-    	 * a jak juz sie zrobi, to ogarnac by sie sam odrobil jak
-    	 * polaczenie pierdyknie, albo ogarnac cos fajnego...
-    	 * 
-    	 * jak sie naucze wiecej o tym mechanizmie to to zrobie
-    	 * na legalu, bo dokumentacja jest calkiem fajnie
-    	 * zrobiona i da sie z tego wiele wywnioskowac
-    	 */
+    	
+    	sAddr = addr;
+    	iPort = port;
     	
     	if (!sockThread.isAlive()) sockThread.start();
     	
@@ -163,10 +157,10 @@ public class ConnectSocket {
     protected static void Parse(String msg)
 	{ 
 		final String command = msg;
-	    handler.post(new Runnable() {
+	    handler.post(new Runnable(){
 			
 			@Override
-			public void run() {
+			public void run(){
 				Toast.makeText(context, command, Toast.LENGTH_LONG).show();
 			}
 			

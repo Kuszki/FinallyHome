@@ -2,12 +2,8 @@ package com.example.finallyhome;
 
 // TEST
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,7 +12,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
@@ -115,7 +110,8 @@ protected void onCreate(Bundle savedInstanceState) {
 		    case R.id.action_connect:
 		    	//Connect the socket with server
 		    	
-		    	client.Connect();
+		    	client.Connect(my_set_ip_preference, Integer.parseInt(my_set_port_preference));
+
 		    	//client.Send("test");
 		    	
 				//if(connectOn)
