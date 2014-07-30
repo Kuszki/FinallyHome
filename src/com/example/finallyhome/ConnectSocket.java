@@ -37,7 +37,7 @@ public class ConnectSocket {
 	protected static BufferedReader in = null;
 	
 	// mapka na wartosci naszych pol - klucz String i pola Float
-	protected static Map<String, Float> values = new HashMap<String, Float>();
+	protected static Map<String, Integer> values = new HashMap<String, Integer>();
 	
 	// DEBUG, a moze i zostanie na stale
 	protected static Activity context = null;
@@ -94,7 +94,7 @@ public class ConnectSocket {
 	public ConnectSocket(Activity c)
 	{
 		
-		//if (values.isEmpty()) {
+		if (values.isEmpty()) {
 		
 		/* TODO trzeba tutaj zrobic liste zmiennych wystepujacych w 
 		 * ustawieniach programu
@@ -111,7 +111,21 @@ public class ConnectSocket {
 		 * globalna i robiona tylko przy pierwszym instancjowaniu
 		 */
 			
-		//}
+		values.put("porch.light.on", 0);
+		values.put("porch.light.power", 0);
+		
+		values.put("doors.lock", 0);
+		
+		values.put("salon.light.on", 0);
+		values.put("salon.light.power", 0);
+		
+		values.put("salon.blinds.on", 0);
+		values.put("salon.blinds.power", 0);
+		
+		values.put("salon.heat.on", 0);
+		values.put("salon.heat.power", 0);
+			
+		}
 		
 		// referencja do kontekstu
 		context = c;
@@ -179,18 +193,31 @@ public class ConnectSocket {
 
     }
     
+    public static void RefreshData()
+    {   	
+    	Send("GET ALL");
+    }
+    
     protected static void Parse(String msg)
 	{ 
-		final String command = msg;
+		final String[] cmd = msg.split(" ");
+		final int params = cmd.length - 1;
 		
 		new Thread(new Runnable()
     	{
 			public void run()
 			{
-				Toast.makeText(context, command, Toast.LENGTH_LONG).show();
+				if (cmd[0] == "SET") if (params == 2) SetVar(cmd[1], Integer.parseInt(cmd[2]));
+				
+				Toast.makeText(context, "parse command: " + cmd[0], Toast.LENGTH_LONG).show();
 			}
     	}).start();
 
 	}
+    
+    protected static void SetVar(String var, Integer value)
+    {
+    	if (values.containsKey(var)) values.put(var, value);
+    }
 }
 
