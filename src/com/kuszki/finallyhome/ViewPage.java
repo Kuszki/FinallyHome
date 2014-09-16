@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Button;
 
 
 public class ViewPage extends Fragment
@@ -40,8 +41,12 @@ public class ViewPage extends Fragment
     {
         View v = inflater.inflate(view, container, false);
         
-        if (v.findViewById(R.id.buttonConnect) != null) MainActivity.Context.SetClickListener(v.findViewById(R.id.buttonConnect));
         if (v.findViewById(R.id.buttonSend) != null) MainActivity.Context.SetClickListener(v.findViewById(R.id.buttonSend));
+        if (v.findViewById(R.id.buttonConnect) != null)
+        {
+        	MainActivity.buttonConnect = (Button) v.findViewById(R.id.buttonConnect);
+        	MainActivity.Context.SetClickListener(v.findViewById(R.id.buttonConnect));
+        }
         
         if (v.findViewById(R.id.editAdress) != null) MainActivity.editAdress = (EditText) v.findViewById(R.id.editAdress);
         if (v.findViewById(R.id.editPort) != null) MainActivity.editPort = (EditText) v.findViewById(R.id.editPort);

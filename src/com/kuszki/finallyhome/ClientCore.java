@@ -22,6 +22,8 @@ public class ClientCore extends ServerClient
 			public void run()
 			{
 				Toast.makeText(context, "Połączono z serwerem", Toast.LENGTH_LONG).show();
+				
+				MainActivity.Context.buttonConnect.setText("Rozłącz");
 			}
 		});
 	}
@@ -34,23 +36,36 @@ public class ClientCore extends ServerClient
 			public void run()
 			{
 				Toast.makeText(context, "Rozłączono z serwerem", Toast.LENGTH_LONG).show();
+				
+				MainActivity.Context.buttonConnect.setText("Połącz");
 			}
 		});
 	}
 	
 	@Override
-	public void onRead(String msg)
+	public void onRead(final String msg)
 	{
 		context.runOnUiThread(new Runnable()
 		{
 			public void run()
 			{
+				if (msg.charAt(0) != 255){
+				
 				//final String[] cmd = msg.split(" ");
 				//final int params = cmd.length - 1;
 					
 				//if (cmd[0] == "set") if (params == 2) SetVar(cmd[1], Integer.parseInt(cmd[2]));
 						
 				//Toast.makeText(context, "parse command: " + cmd[0], Toast.LENGTH_LONG).show();
+				
+					try {
+						context.editLog.append(msg);
+					} catch (Exception e) {
+						onError(e);
+					}
+					
+				}
+				
 			}
 		});
 	}
@@ -88,15 +103,37 @@ public class ClientCore extends ServerClient
 	
 	public void onConnectButtonClick(View view)
 	{
-		//final String adress = context.editAdress.getText().toString();
-		//final int port = Integer.parseInt(context.editPort.getText().toString());
 		
-		//if (port > 65535 || port < 1024) Toast.makeText(context, "Niepoprawny numer portu", Toast.LENGTH_LONG).show();
-		//else link.Connect(adress, port);
+		if (socket == null) try {
 		
-		//Connect("10.0.0.100", 9096);
+			final String adress = context.editAdress.getText().toString();
+			final int port = Integer.parseInt(context.editPort.getText().toString());
+			
+			Connect(adress, port);
+			
+		} catch (Exception e) {
+			
+			onError(e);
 		
-		Connect("10.0.0.100", 9096);
+		} else Disconnect();
+
+	}
+	
+	public void onSendButtonClick(View view)
+	{
+		if (socket != null) try {
+			
+			final String cmd = context.editCmd.getText().toString() + "\n";
+			
+			Send(cmd);
+			
+			context.editCmd.setText("");
+			
+		} catch (Exception e) {
+			
+			onError(e);
+		
+		}
 	}
 	
 	protected void SetVar(String var, Integer value)

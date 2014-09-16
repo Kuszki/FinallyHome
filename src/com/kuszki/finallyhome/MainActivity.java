@@ -22,6 +22,8 @@ public class MainActivity extends FragmentActivity
 	public static	EditText		editCmd			=	null;
 	public static	EditText		editLog			=	null;
 	
+	public static	Button			buttonConnect	=	null;
+	
 	private			String[]		titles			=	null;
 	
     private			ViewPager		pager			=	null;
@@ -40,7 +42,7 @@ public class MainActivity extends FragmentActivity
 					client.onConnectButtonClick(v);
 				break;
 				case R.id.buttonSend:
-					client.onConnectButtonClick(v);
+					client.onSendButtonClick(v);
 				break;
 			}
 	    }

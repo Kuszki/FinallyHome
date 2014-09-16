@@ -22,18 +22,30 @@ public abstract class ServerClient {
 	protected		PrintWriter		out			=	null;
 	protected		BufferedReader	in			=	null;
 	
-	protected		String			adress		=	"10.0.0.100";
-	protected		int				port		=	9096;
+	protected		SockThread		thread		=	null;
 	
-	protected		Thread			thread		=	new Thread()
+	protected final	String			prompt		=	"\r\n$: ";
+	
+	protected class	SockThread extends Thread
 	{
+		
+		private			boolean	bContinue = true;
+		
+		private final	String	sAddr;
+		private final	int		uPort;
+		
+		public SockThread(String adress, int port)
+		{
+			sAddr = adress;
+			uPort = port;
+		}
 		
 		public void run()
 		{
 			
 			try {
 				
-				socket	=	new Socket(InetAddress.getByName(adress), port);
+				socket	=	new Socket(InetAddress.getByName(sAddr), uPort);
 				
 				out		=	new PrintWriter(socket.getOutputStream());
 				in		=	new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -42,31 +54,49 @@ public abstract class ServerClient {
 				
 				onConnect();
 
-				while (true) try {
+				while (bContinue) try {
 					
-						final String msg = in.readLine();
-						
-						Log.d("connection","recv message: \"" + msg + "\"");
+						char[] buf = new char[512];
 					
-						if (msg != null) onRead(msg);
-					
-				} catch (Exception e){ onError(e); }
+						if (in.read(buf) > 0) 
+						{
 
-			} catch (Exception e){ onError(e); }
+							String msg = new String(buf);
+					
+							onRead(msg.replace(prompt, ""));
+						
+						} else bContinue = false;
+					
+				} catch (Exception e) {
+
+					bContinue = false;
+					
+				}
+				
+				onDisconnect();
+
+			} catch (Exception e) {
+				
+				onError(e);
+				
+			}
 			
 	    };
 	};
 
 	public void Connect(String addr, int port)
 	{		
-		try {
+		if (thread == null)
+		{
+			thread = new SockThread(addr, port);
+			
 			thread.start();
-		} catch (Exception e){ onError(e); }
+		}
 	}
   
-	public void Disconnect(String addr, int port)
+	public void Disconnect()
 	{
-		new Thread(new Runnable()
+		new Thread()
 		{
 			public void run()
 			{
@@ -74,34 +104,37 @@ public abstract class ServerClient {
 					
 					socket.close();
 					
-				} catch (IOException e) {
-
-					e.printStackTrace();
-					Log.d("io", "Unknown IO exeption");
+				} catch (Exception e) {
+					
+					onError(e);
+					
+				} finally {
+					
+					socket = null;
+					thread = null;
 					
 				}
 			}
-		}).start();
+		}.start();
   	}
 
-	public void Send(String str)
+	public void Send(final String message)
 	{
-		final String message = str;
-  	
-		new Thread(new Runnable()
+		new Thread()
 		{
 			public void run()
 			{
-				if (socket.isConnected()){
+				if (socket != null){
 				
 					out.write(message);
-					Log.d("connection", "message \"" + message + "\" send");
-				
+
 					out.flush();
+					
+					if (out.checkError()) Disconnect();
 					
 				}
 			}
-		}).start();
+		}.start();
 	}
 	
 	public abstract void onConnect();
