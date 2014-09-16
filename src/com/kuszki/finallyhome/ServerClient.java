@@ -1,19 +1,10 @@
 package com.kuszki.finallyhome;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
-import java.util.HashMap;
-import java.util.Map;
-
-import android.os.StrictMode;
-import android.util.Log;
-import android.widget.Toast;
-import android.app.Activity;
 
 public abstract class ServerClient {
 	

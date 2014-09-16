@@ -3,7 +3,6 @@ package com.kuszki.finallyhome;
 import java.util.HashMap;
 import java.util.Map;
 
-import android.app.Activity;
 import android.view.View;
 import android.widget.Toast;
 
@@ -23,7 +22,7 @@ public class ClientCore extends ServerClient
 			{
 				Toast.makeText(context, "Połączono z serwerem", Toast.LENGTH_LONG).show();
 				
-				MainActivity.Context.buttonConnect.setText("Rozłącz");
+				MainActivity.buttonConnect.setText("Rozłącz");
 			}
 		});
 	}
@@ -37,7 +36,7 @@ public class ClientCore extends ServerClient
 			{
 				Toast.makeText(context, "Rozłączono z serwerem", Toast.LENGTH_LONG).show();
 				
-				MainActivity.Context.buttonConnect.setText("Połącz");
+				MainActivity.buttonConnect.setText("Połącz");
 			}
 		});
 	}
@@ -59,7 +58,7 @@ public class ClientCore extends ServerClient
 				//Toast.makeText(context, "parse command: " + cmd[0], Toast.LENGTH_LONG).show();
 				
 					try {
-						context.editLog.append(msg);
+						MainActivity.editLog.append(msg);
 					} catch (Exception e) {
 						onError(e);
 					}
@@ -106,8 +105,8 @@ public class ClientCore extends ServerClient
 		
 		if (socket == null) try {
 		
-			final String adress = context.editAdress.getText().toString();
-			final int port = Integer.parseInt(context.editPort.getText().toString());
+			final String adress = MainActivity.editAdress.getText().toString();
+			final int port = Integer.parseInt(MainActivity.editPort.getText().toString());
 			
 			Connect(adress, port);
 			
@@ -123,11 +122,11 @@ public class ClientCore extends ServerClient
 	{
 		if (socket != null) try {
 			
-			final String cmd = context.editCmd.getText().toString() + "\n";
+			final String cmd = MainActivity.editCmd.getText().toString() + "\n";
 			
 			Send(cmd);
 			
-			context.editCmd.setText("");
+			MainActivity.editCmd.setText("");
 			
 		} catch (Exception e) {
 			
