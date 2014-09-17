@@ -21,6 +21,7 @@ public class ClientCore extends ServerClient
 			public void run()
 			{
 				Toast.makeText(context, "Połączono z serwerem", Toast.LENGTH_LONG).show();
+				MainActivity.editLog.append(" >> Połączono z serwerem\n");
 				
 				MainActivity.buttonConnect.setText("Rozłącz");
 			}
@@ -35,6 +36,7 @@ public class ClientCore extends ServerClient
 			public void run()
 			{
 				Toast.makeText(context, "Rozłączono z serwerem", Toast.LENGTH_LONG).show();
+				MainActivity.editLog.append(" >> Rozłączono z serwerem\n");
 				
 				MainActivity.buttonConnect.setText("Połącz");
 			}
@@ -48,7 +50,7 @@ public class ClientCore extends ServerClient
 		{
 			public void run()
 			{
-				if (msg.charAt(0) != 255){
+				if (msg.charAt(0) < 127){
 				
 				//final String[] cmd = msg.split(" ");
 				//final int params = cmd.length - 1;
