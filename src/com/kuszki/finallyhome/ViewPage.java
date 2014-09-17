@@ -42,8 +42,7 @@ public class ViewPage extends Fragment
         	MainActivity.Context.SetClickListener(v.findViewById(R.id.buttonConnect));
         }
         
-        if (v.findViewById(R.id.editAdress) != null) MainActivity.editAdress = (EditText) v.findViewById(R.id.editAdress);
-        if (v.findViewById(R.id.editPort) != null) MainActivity.editPort = (EditText) v.findViewById(R.id.editPort);
+        if (v.findViewById(R.id.editSocket) != null) MainActivity.editSocket = (EditText) v.findViewById(R.id.editSocket);
         if (v.findViewById(R.id.editCommand) != null) MainActivity.editCmd = (EditText) v.findViewById(R.id.editCommand);
         if (v.findViewById(R.id.editLog) != null)
         {

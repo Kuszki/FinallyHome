@@ -14,8 +14,7 @@ public class MainActivity extends FragmentActivity
 
 	public static	MainActivity 	Context			=	null;
 	
-	public static	EditText		editAdress		=	null;
-	public static	EditText		editPort		=	null;
+	public static	EditText		editSocket		=	null;
 	public static	EditText		editCmd			=	null;
 	public static	EditText		editLog			=	null;
 	
@@ -30,7 +29,8 @@ public class MainActivity extends FragmentActivity
     private 		ClientCore		client			=	null;
     
     public 			OnClickListener clickListener	=	new OnClickListener(){
-		@Override
+		
+    	@Override
 	    public void onClick(final View v)
 		{
 			switch(v.getId())
@@ -43,6 +43,7 @@ public class MainActivity extends FragmentActivity
 				break;
 			}
 	    }
+    	
 	};
 	
 	public void SetClickListener(View v)

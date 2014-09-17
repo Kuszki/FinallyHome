@@ -52,13 +52,6 @@ public class ClientCore extends ServerClient
 			{
 				if (msg.charAt(0) < 127){
 				
-				//final String[] cmd = msg.split(" ");
-				//final int params = cmd.length - 1;
-					
-				//if (cmd[0] == "set") if (params == 2) SetVar(cmd[1], Integer.parseInt(cmd[2]));
-						
-				//Toast.makeText(context, "parse command: " + cmd[0], Toast.LENGTH_LONG).show();
-				
 					try {
 						MainActivity.editLog.append(msg);
 					} catch (Exception e) {
@@ -107,10 +100,9 @@ public class ClientCore extends ServerClient
 		
 		if (socket == null) try {
 		
-			final String adress = MainActivity.editAdress.getText().toString();
-			final int port = Integer.parseInt(MainActivity.editPort.getText().toString());
+			final String[] params = MainActivity.editSocket.getText().toString().split(":");
 			
-			Connect(adress, port);
+			Connect(params[0], Integer.parseInt(params[1]));
 			
 		} catch (Exception e) {
 			
