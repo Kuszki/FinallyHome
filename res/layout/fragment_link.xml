@@ -16,29 +16,6 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
-
-            <TextView
-                android:id="@+id/labelAdress"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="Adres serwera" />
-
-            <EditText
-                android:id="@+id/editAdress"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="text|textUri|textWebEditText"
-                android:text="10.0.0.100" >
-
-                <requestFocus />
-            </EditText>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/activity_vertical_margin" >
 
             <LinearLayout
@@ -48,28 +25,26 @@
                 android:orientation="vertical" >
 
                 <TextView
-                    android:id="@+id/labelPort"
+                    android:id="@+id/labelSocket"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Port połączenia" />
+                    android:text="Gniazdo połączenia" />
 
                 <EditText
-                    android:id="@+id/editPort"
+                    android:id="@+id/editSocket"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
-                    android:inputType="number"
-                    android:maxLength="5"
-                    android:text="9096" />
+                    android:inputType="text"
+                    android:text="10.0.0.100:9096" />
 
             </LinearLayout>
 
             <Button
                 android:id="@+id/buttonConnect"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="fill_parent"
                 android:layout_weight="1"
                 android:minWidth="100dip"
                 android:text="Połącz" />
@@ -93,8 +68,12 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"
+            android:clickable="false"
             android:ems="10"
+            android:fitsSystemWindows="true"
+            android:freezesText="true"
             android:inputType="none"
+            android:linksClickable="true"
             android:scrollHorizontally="false"
             android:scrollbarAlwaysDrawVerticalTrack="true"
             android:scrollbars="vertical" />
@@ -102,7 +81,6 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:layout_gravity="bottom" >
 
             <EditText
