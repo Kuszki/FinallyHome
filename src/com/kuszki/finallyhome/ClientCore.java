@@ -21,9 +21,10 @@ public class ClientCore extends ServerClient
 			public void run()
 			{
 				Toast.makeText(context, "Połączono z serwerem", Toast.LENGTH_LONG).show();
-				MainActivity.editLog.append(" >> Połączono z serwerem\n");
+				MainActivity.Edits.get(R.id.editLog).append(" >> Połączono z serwerem\n");
 				
-				MainActivity.buttonConnect.setText("Rozłącz");
+				MainActivity.Buttons.get(R.id.buttonConnect).setText("Rozłącz");
+				MainActivity.Buttons.get(R.id.buttonSend).setEnabled(true);
 			}
 		});
 	}
@@ -36,9 +37,10 @@ public class ClientCore extends ServerClient
 			public void run()
 			{
 				Toast.makeText(context, "Rozłączono z serwerem", Toast.LENGTH_LONG).show();
-				MainActivity.editLog.append(" >> Rozłączono z serwerem\n");
+				MainActivity.Edits.get(R.id.editLog).append(" >> Rozłączono z serwerem\n");
 				
-				MainActivity.buttonConnect.setText("Połącz");
+				MainActivity.Buttons.get(R.id.buttonConnect).setText("Połącz");
+				MainActivity.Buttons.get(R.id.buttonSend).setEnabled(false);
 			}
 		});
 	}
@@ -53,7 +55,7 @@ public class ClientCore extends ServerClient
 				if (msg.charAt(0) < 127){
 				
 					try {
-						MainActivity.editLog.append(msg);
+						MainActivity.Edits.get(R.id.editLog).append(msg);
 					} catch (Exception e) {
 						onError(e);
 					}
@@ -79,20 +81,6 @@ public class ClientCore extends ServerClient
 	public ClientCore(MainActivity activity)
 	{
 		context = activity;
-		
-		values.put("porch.light.on", 0);
-		values.put("porch.light.power", 0);
-		
-		values.put("doors.lock", 0);
-		
-		values.put("salon.light.on", 0);
-		values.put("salon.light.power", 0);
-		
-		values.put("salon.blinds.on", 0);
-		values.put("salon.blinds.power", 0);
-		
-		values.put("salon.heat.on", 0);
-		values.put("salon.heat.power", 0);
 	}
 	
 	public void onConnectButtonClick(View view)
@@ -100,7 +88,7 @@ public class ClientCore extends ServerClient
 		
 		if (socket == null) try {
 		
-			final String[] params = MainActivity.editSocket.getText().toString().split(":");
+			final String[] params = MainActivity.Edits.get(R.id.editSocket).getText().toString().split(":");
 			
 			Connect(params[0], Integer.parseInt(params[1]));
 			
@@ -116,11 +104,11 @@ public class ClientCore extends ServerClient
 	{
 		if (socket != null) try {
 			
-			final String cmd = MainActivity.editCmd.getText().toString() + "\n";
+			final String cmd = MainActivity.Edits.get(R.id.editCommand).getText().toString() + "\n";
 			
 			Send(cmd);
 			
-			MainActivity.editCmd.setText("");
+			MainActivity.Edits.get(R.id.editCommand).setText("");
 			
 		} catch (Exception e) {
 			
@@ -131,7 +119,7 @@ public class ClientCore extends ServerClient
 	
 	protected void SetVar(String var, Integer value)
 	{
-	  	if (values.containsKey(var)) values.put(var, value);
+	  	values.put(var, value);
 	}
 	
 	protected void RefreshData()

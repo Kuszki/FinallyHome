@@ -35,19 +35,24 @@ public class ViewPage extends Fragment
     {
         View v = inflater.inflate(view, container, false);
         
-        if (v.findViewById(R.id.buttonSend) != null) MainActivity.Context.SetClickListener(v.findViewById(R.id.buttonSend));
+        if (v.findViewById(R.id.buttonSend) != null)
+        {
+        	MainActivity.Buttons.put(R.id.buttonSend, (Button) v.findViewById(R.id.buttonSend));
+        	MainActivity.Context.SetClickListener(v.findViewById(R.id.buttonSend));
+        	v.findViewById(R.id.buttonSend).setEnabled(false);
+        }
         if (v.findViewById(R.id.buttonConnect) != null)
         {
-        	MainActivity.buttonConnect = (Button) v.findViewById(R.id.buttonConnect);
+        	MainActivity.Buttons.put(R.id.buttonConnect, (Button) v.findViewById(R.id.buttonConnect));
         	MainActivity.Context.SetClickListener(v.findViewById(R.id.buttonConnect));
         }
         
-        if (v.findViewById(R.id.editSocket) != null) MainActivity.editSocket = (EditText) v.findViewById(R.id.editSocket);
-        if (v.findViewById(R.id.editCommand) != null) MainActivity.editCmd = (EditText) v.findViewById(R.id.editCommand);
+        if (v.findViewById(R.id.editSocket) != null) MainActivity.Edits.put(R.id.editSocket, (EditText) v.findViewById(R.id.editSocket));
+        if (v.findViewById(R.id.editCommand) != null) MainActivity.Edits.put(R.id.editCommand, (EditText) v.findViewById(R.id.editCommand));
         if (v.findViewById(R.id.editLog) != null)
         {
-        	MainActivity.editLog = (EditText) v.findViewById(R.id.editLog);
-        	MainActivity.editLog.setKeyListener(null);
+        	MainActivity.Edits.put(R.id.editLog, (EditText) v.findViewById(R.id.editLog));
+        	((EditText) v.findViewById(R.id.editLog)).setKeyListener(null);
         }
 
         return v;
