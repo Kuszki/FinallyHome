@@ -22,7 +22,7 @@
             android:orientation="vertical" >
 
             <Switch
-                android:id="@+id/switchPorchLight"
+                android:id="@+id/switchConsole"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Światło" />
@@ -38,6 +38,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </LinearLayout>
+
+        <Switch
+            android:id="@+id/switchDoors"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:text="Blokada drzwi" />
 
     </LinearLayout>
 

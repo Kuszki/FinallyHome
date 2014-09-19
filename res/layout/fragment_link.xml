@@ -15,8 +15,7 @@
 
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/activity_vertical_margin" >
+            android:layout_height="wrap_content" >
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -50,15 +49,17 @@
                 android:text="Połącz" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/labelConsole"
+        <Switch
+            android:id="@+id/switchConsole"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:checked="true"
             android:text="Konsola" />
+
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/layoutConsole"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical" >

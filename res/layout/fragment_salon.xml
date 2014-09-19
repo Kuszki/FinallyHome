@@ -16,6 +16,26 @@
         android:orientation="vertical" >
 
         <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:orientation="vertical" >
+
+            <Switch
+                android:id="@+id/switchDoors"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Zasłony" />
+
+            <SeekBar
+                android:id="@+id/SeekBar01"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:max="10"
+                android:progress="0" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/activity_vertical_margin"
@@ -43,18 +63,71 @@
             android:orientation="vertical" >
             
             <Switch
-                android:id="@+id/switchSalonBlinds"
+                android:id="@+id/switchSalonHeat"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Zasłony" />
+                android:text="Ogrzewanie" />
 
             <SeekBar
-                android:id="@+id/barSalonBlinds"
+                android:id="@+id/barSalonHeat"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:max="10"
+                android:max="20"
                 android:progress="0" />
             
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:orientation="vertical" >
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/labelHeatSet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:text="Ustawiona temperatura:" />
+
+                <TextView
+                    android:id="@+id/labelHeatSetValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:orientation="vertical" >
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/labelHeatCurrent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:text="Ustawiona temperatura:" />
+
+                <TextView
+                    android:id="@+id/labelHeatCurrentValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true" />
+
+            </RelativeLayout>
         </LinearLayout>
 
     </LinearLayout>
