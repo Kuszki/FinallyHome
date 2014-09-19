@@ -1,6 +1,10 @@
 package com.kuszki.finallyhome;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import android.app.ActionBar;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
@@ -8,25 +12,24 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Switch;
 
 public class MainActivity extends FragmentActivity
 {
 
-	public static	MainActivity 	Context			=	null;
+	public static	MainActivity 			Context			=	null;
 	
-	public static	EditText		editSocket		=	null;
-	public static	EditText		editCmd			=	null;
-	public static	EditText		editLog			=	null;
+	public static	Map<Integer, EditText>	Edits			=	new HashMap<Integer, EditText>();
+	public static	Map<Integer, Button>	Buttons			=	new HashMap<Integer, Button>();
+	public static	Map<Integer, Switch>	Switches		=	new HashMap<Integer, Switch>();
 	
-	public static	Button			buttonConnect	=	null;
+	private			String[]				titles			=	null;
 	
-	private			String[]		titles			=	null;
-	
-    private			ViewPager		pager			=	null;
-    private			ActionBar		bar				=	null;
-    private 		TabsWidget		taber			=	null;
+    private			ViewPager				pager			=	null;
+    private			ActionBar				bar				=	null;
+    private 		TabsWidget				taber			=	null;
     
-    private 		ClientCore		client			=	null;
+    private 		ClientCore				client			=	null;
     
     public 			OnClickListener clickListener	=	new OnClickListener(){
 		
@@ -57,6 +60,8 @@ public class MainActivity extends FragmentActivity
 
     	super.onCreate(savedInstanceState);
     	
+    	setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+    	
     	setContentView(R.layout.activity_main);
     	
     	Context	=	this;
@@ -68,7 +73,10 @@ public class MainActivity extends FragmentActivity
     	client	=	new ClientCore(this);
     	
     	bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        for (int i = 0; i < titles.length; i++) bar.addTab(bar.newTab().setText(titles[i]).setTabListener(taber));
+        bar.setDisplayShowTitleEnabled(false);
+        bar.setDisplayShowHomeEnabled(false);
+        
+        for (String title : titles) bar.addTab(bar.newTab().setText(title).setTabListener(taber));
 
         pager.setAdapter(new PagerWidget(getSupportFragmentManager()));
         pager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener()
