@@ -52,9 +52,9 @@ public abstract class ServerClient {
 						if (in.read(buf) > 0) 
 						{
 
-							String msg = new String(buf);
+							final String msg = (new String(buf)).replace(prompt, "");
 					
-							onRead(msg.replace(prompt, ""));
+							if (!msg.isEmpty()) onRead(msg);
 						
 						} else bContinue = false;
 					
