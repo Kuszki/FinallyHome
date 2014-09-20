@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Button;
+import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -48,6 +49,7 @@ public class ViewPage extends Fragment
         if ((tmp = v.findViewById(R.id.switchDoors)) != null) AddSwitch((Switch) tmp);
         if ((tmp = v.findViewById(R.id.switchSalonLight)) != null) AddSwitch((Switch) tmp);
         if ((tmp = v.findViewById(R.id.switchSalonHeat)) != null) AddSwitch((Switch) tmp);
+        if ((tmp = v.findViewById(R.id.switchSalonBlinds)) != null) AddSwitch((Switch) tmp);
         if ((tmp = v.findViewById(R.id.switchConsole)) != null) AddSwitch((Switch) tmp);
         // ------------------------------------------ EDITS ------------------------------------------
         if ((tmp = v.findViewById(R.id.editSocket)) != null) AddEdit((EditText) tmp);
@@ -58,6 +60,13 @@ public class ViewPage extends Fragment
         if ((tmp = v.findViewById(R.id.layoutSalon)) != null) AddView((ViewGroup) tmp);
         if ((tmp = v.findViewById(R.id.layoutPorch)) != null) AddView((ViewGroup) tmp);
         // ------------------------------------------ LABELS -----------------------------------------
+        if ((tmp = v.findViewById(R.id.labelHeatCurrentValue)) != null) AddLabel((TextView) tmp);
+        if ((tmp = v.findViewById(R.id.labelHeatSetValue)) != null) AddLabel((TextView) tmp);
+        // ------------------------------------------- BARS ------------------------------------------
+        if ((tmp = v.findViewById(R.id.barPorchLight)) != null) AddBar((SeekBar) tmp);
+        if ((tmp = v.findViewById(R.id.barSalonBlinds)) != null) AddBar((SeekBar) tmp);
+        if ((tmp = v.findViewById(R.id.barSalonHeat)) != null) AddBar((SeekBar) tmp);
+        if ((tmp = v.findViewById(R.id.barSalonLight)) != null) AddBar((SeekBar) tmp);
 
         return v;
     }
@@ -78,7 +87,16 @@ public class ViewPage extends Fragment
 	protected void AddSwitch(Switch v)
 	{
 		MainActivity.Switches.put(v.getId(), v);
-    	MainActivity.Context.SetSwitchListener(v);
+    	
+		if (v.getId() != R.id.switchConsole){
+			
+			MainActivity.Context.SetClickListener(v);
+			
+		} else {
+			
+			MainActivity.Context.SetSwitchListener(v);
+			
+		}
 	}
 	
 	protected void AddEdit(EditText v)
@@ -107,5 +125,12 @@ public class ViewPage extends Fragment
 	protected void AddLabel(TextView v)
 	{
 		MainActivity.Labels.put(v.getId(), v);
+	}
+	
+	protected void AddBar(SeekBar v)
+	{
+		MainActivity.Bars.put(v.getId(), v);
+		
+		MainActivity.Context.SetSeekListener(v);
 	}
 };
