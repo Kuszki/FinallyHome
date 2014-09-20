@@ -1,11 +1,14 @@
 package com.kuszki.finallyhome;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 public class PagerWidget extends FragmentPagerAdapter
 {
+	
+	protected static final int count = 3;
 	
 	public PagerWidget(FragmentManager fm)
 	{
@@ -15,13 +18,13 @@ public class PagerWidget extends FragmentPagerAdapter
     @Override
     public Fragment getItem(int pos)
     {
-		return new ViewPage(pos);
+    	return new ViewPage(pos);
     }
 
     @Override
     public int getCount()
     {
-        return 3;
-    }       
+        return count;
+    }
 
 }
