@@ -9,10 +9,31 @@ import android.widget.Toast;
 public class ClientCore extends ServerClient
 {
 	
-	protected	Map<String, Integer>		values		=	new HashMap<String, Integer>();
+	protected	Map<String, Integer>		valuesSwitch	=	new HashMap<String, Integer>();
+	protected	Map<String, Integer>		valuesBar		=	new HashMap<String, Integer>();
+	protected	Map<String, Integer>		valuesLabel		=	new HashMap<String, Integer>();
 	
-	protected	MainActivity 				context		=	null;
+	protected	MainActivity 				context			=	null;
 
+	public ClientCore(MainActivity activity)
+	{
+		context = activity;
+		
+		valuesSwitch.put("porch.light.on", R.id.switchPorchLight);
+		valuesSwitch.put("salon.light.on", R.id.switchSalonLight);
+		valuesSwitch.put("salon.blinds.on", R.id.switchSalonBlinds);
+		valuesSwitch.put("salon.heat.on", R.id.switchSalonHeat);
+		valuesSwitch.put("doors.lock", R.id.switchDoors);
+		
+		valuesBar.put("porch.light.power", R.id.barPorchLight);
+		valuesBar.put("salon.light.power", R.id.barSalonLight);
+		valuesBar.put("salon.blinds.power", R.id.barSalonBlinds);
+		valuesBar.put("salon.heat.set", R.id.barSalonHeat);
+		
+		valuesLabel.put("salon.heat.set", R.id.labelHeatSetValue);
+		valuesLabel.put("salon.heat.current", R.id.labelHeatCurrentValue);
+	}
+	
 	@Override
 	public void onConnect()
 	{
@@ -25,6 +46,9 @@ public class ClientCore extends ServerClient
 				
 				MainActivity.Buttons.get(R.id.buttonConnect).setText("Rozłącz");
 				MainActivity.Buttons.get(R.id.buttonSend).setEnabled(true);
+				
+				context.SetChildsState(MainActivity.Views.get(R.id.layoutSalon), true);
+				context.SetChildsState(MainActivity.Views.get(R.id.layoutPorch), true);
 			}
 		});
 	}
@@ -36,51 +60,39 @@ public class ClientCore extends ServerClient
 		{
 			public void run()
 			{
-				Toast.makeText(context, "Rozłączono z serwerem", Toast.LENGTH_LONG).show();
-				MainActivity.Edits.get(R.id.editLog).append(" >> Rozłączono z serwerem\n");
-				
 				MainActivity.Buttons.get(R.id.buttonConnect).setText("Połącz");
 				MainActivity.Buttons.get(R.id.buttonSend).setEnabled(false);
+				
+				context.SetChildsState(MainActivity.Views.get(R.id.layoutSalon), false);
+				context.SetChildsState(MainActivity.Views.get(R.id.layoutPorch), false);
 			}
 		});
+		
+		Msg("Rozłączono z serwerem");
+		Log(" >> Rozłączono z serwerem\n");
 	}
 	
 	@Override
-	public void onRead(final String msg)
+	public void onRead(String msg)
 	{
-		context.runOnUiThread(new Runnable()
+		if (msg.charAt(0) < 127)
 		{
-			public void run()
-			{
-				if (msg.charAt(0) < 127){
+			Log(msg);
+
+			for (final String action: msg.trim().split("\n")){
 				
-					try {
-						MainActivity.Edits.get(R.id.editLog).append(msg);
-					} catch (Exception e) {
-						onError(e);
-					}
-					
-				}
+				final String[] cmd = action.trim().split(" ");
+
+				if (cmd.length > 0) Interpret(cmd);
 				
 			}
-		});
+		}
 	}
 	
 	@Override
 	public void onError(final Exception e)
 	{
-		context.runOnUiThread(new Runnable()
-		{
-			public void run()
-			{
-				Toast.makeText(context, e.getClass().getName() + ": " + e.getMessage(), Toast.LENGTH_LONG).show();
-			}
-		});
-	}
-	
-	public ClientCore(MainActivity activity)
-	{
-		context = activity;
+		Msg(e.getClass().getName() + ": " + e.getMessage());
 	}
 	
 	public void onConnectButtonClick(View view)
@@ -117,9 +129,60 @@ public class ClientCore extends ServerClient
 		}
 	}
 	
-	protected void SetVar(String var, Integer value)
+	protected void onSetVar(final String var, final Integer value)
 	{
-	  	values.put(var, value);
+		context.runOnUiThread(new Runnable()
+		{
+			public void run()
+			{
+				if (valuesSwitch.keySet().contains(var)) MainActivity.Switches.get(valuesSwitch.get(var)).setChecked(value == 1);
+		
+				if (valuesBar.keySet().contains(var)) MainActivity.Bars.get(valuesSwitch.get(var)).setProgress(value);
+		
+				if (valuesLabel.keySet().contains(var)) MainActivity.Labels.get(valuesSwitch.get(var)).setText(value.toString() + " °C");
+			}
+		});
+	}
+	
+	protected void Log(final String msg)
+	{
+		context.runOnUiThread(new Runnable()
+		{
+			public void run()
+			{
+				MainActivity.Edits.get(R.id.editLog).append(msg);
+			}
+		});
+	}
+	
+	protected void Msg(final String msg)
+	{
+		context.runOnUiThread(new Runnable()
+		{
+			public void run()
+			{
+				Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+			}
+		});
+	}
+	
+	protected void Interpret(final String[] msg)
+	{
+		final int count = msg.length - 1;
+		
+		if (msg[0].contentEquals("set") && count == 2) try {
+			
+			int value = Integer.parseInt(msg[2]);
+			
+			//onSetVar(msg[1], value > 15 ? value - 15 : value);
+			
+			Msg("ON SET " + msg[1] + " = " + msg[2]);
+		
+		} catch (Exception e) {
+			
+			Log("Nieudana interpretacja 'set'");
+			
+		}
 	}
 	
 	protected void RefreshData()
