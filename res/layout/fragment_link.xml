@@ -53,7 +53,7 @@
             android:id="@+id/switchConsole"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:checked="true"
+            android:checked="false"
             android:text="Konsola" />
 
     </LinearLayout>
@@ -62,7 +62,8 @@
         android:id="@+id/layoutConsole"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:visibility="invisible" >
 
         <EditText
             android:id="@+id/editLog"
