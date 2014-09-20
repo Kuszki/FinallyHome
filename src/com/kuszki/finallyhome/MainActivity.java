@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import android.app.ActionBar;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
@@ -29,8 +30,8 @@ public class MainActivity extends FragmentActivity
 	public static	Map<Integer, Button>	Buttons			=	new HashMap<Integer, Button>();
 	public static	Map<Integer, Switch>	Switches		=	new HashMap<Integer, Switch>();
 	public static	Map<Integer, ViewGroup>	Views			=	new HashMap<Integer, ViewGroup>();
-	public static	Map<Integer, SeekBar>	Bars			=	new HashMap<Integer, SeekBar>();
 	public static	Map<Integer, TextView>	Labels			=	new HashMap<Integer, TextView>();
+	public static	Map<Integer, SeekBar>	Bars			=	new HashMap<Integer, SeekBar>();
 	
 	private			String[]				titles			=	null;
 	
@@ -40,7 +41,7 @@ public class MainActivity extends FragmentActivity
     
     private 		ClientCore				client			=	null;
     
-    public 			OnClickListener 		clickListener	=	new OnClickListener()
+    public 			OnClickListener 					clickListener	=	new OnClickListener()
     {
 		
     	@Override
@@ -54,12 +55,13 @@ public class MainActivity extends FragmentActivity
 				case R.id.buttonSend:
 					client.onSendButtonClick(v);
 				break;
+				default: client.onChange(v.getId(), ((Switch) v).isChecked() ? 1 : 0);
 			}
 	    }
     	
 	};
 	
-	public			OnCheckedChangeListener switchListener	=	new OnCheckedChangeListener()
+	public			OnCheckedChangeListener 			switchListener	=	new OnCheckedChangeListener()
 	{
 		 
 		@Override
@@ -75,7 +77,7 @@ public class MainActivity extends FragmentActivity
 	
 	};
 	
-	public			OnKeyListener			editListener	=	new OnKeyListener()
+	public			OnKeyListener						editListener	=	new OnKeyListener()
 	{
 		
 		public boolean onKey(View v, int keyCode, KeyEvent event)
@@ -92,7 +94,20 @@ public class MainActivity extends FragmentActivity
 	
 	};
 	
-	public void SetClickListener(Button v)
+	public			SeekBar.OnSeekBarChangeListener		seekListener	=	new SeekBar.OnSeekBarChangeListener() {
+
+        public void onProgressChanged(SeekBar v, int progress, boolean fromUser) {}
+
+        public void onStartTrackingTouch(SeekBar v) {}
+
+        public void onStopTrackingTouch(SeekBar v)
+        {
+        	client.onChange(v.getId(), v.getProgress());
+        }
+
+    };
+	
+	public void SetClickListener(View v)
 	{
 		if (v != null) v.setOnClickListener(clickListener);
 	}
@@ -105,6 +120,11 @@ public class MainActivity extends FragmentActivity
 	public void SetEditListener(EditText v)
 	{
 		if (v != null) v.setOnKeyListener(editListener);
+	}
+	
+	public void SetSeekListener(SeekBar v)
+	{
+		if (v != null) v.setOnSeekBarChangeListener(seekListener);
 	}
 	
 	public void SetChildsState(ViewGroup v, boolean state)
@@ -123,7 +143,7 @@ public class MainActivity extends FragmentActivity
 
     	super.onCreate(savedInstanceState);
     	
-    	//setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+    	setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     	
     	setContentView(R.layout.activity_main);
     	
