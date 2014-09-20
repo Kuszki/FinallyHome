@@ -2,16 +2,19 @@ package com.kuszki.finallyhome;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Button;
+import android.widget.Switch;
+import android.widget.TextView;
 
 
 public class ViewPage extends Fragment
 {
-	private	final	int		view;
+	private	final	int			view;
 	
 	public ViewPage(int index)
 	{
@@ -35,26 +38,74 @@ public class ViewPage extends Fragment
     {
         View v = inflater.inflate(view, container, false);
         
-        if (v.findViewById(R.id.buttonSend) != null)
-        {
-        	MainActivity.Buttons.put(R.id.buttonSend, (Button) v.findViewById(R.id.buttonSend));
-        	MainActivity.Context.SetClickListener(v.findViewById(R.id.buttonSend));
-        	v.findViewById(R.id.buttonSend).setEnabled(false);
-        }
-        if (v.findViewById(R.id.buttonConnect) != null)
-        {
-        	MainActivity.Buttons.put(R.id.buttonConnect, (Button) v.findViewById(R.id.buttonConnect));
-        	MainActivity.Context.SetClickListener(v.findViewById(R.id.buttonConnect));
-        }
+        View tmp = null;
         
-        if (v.findViewById(R.id.editSocket) != null) MainActivity.Edits.put(R.id.editSocket, (EditText) v.findViewById(R.id.editSocket));
-        if (v.findViewById(R.id.editCommand) != null) MainActivity.Edits.put(R.id.editCommand, (EditText) v.findViewById(R.id.editCommand));
-        if (v.findViewById(R.id.editLog) != null)
-        {
-        	MainActivity.Edits.put(R.id.editLog, (EditText) v.findViewById(R.id.editLog));
-        	((EditText) v.findViewById(R.id.editLog)).setKeyListener(null);
-        }
+        // ----------------------------------------- BUTTONS -----------------------------------------
+        if ((tmp = v.findViewById(R.id.buttonSend)) != null) AddButton((Button) tmp);
+        if ((tmp = v.findViewById(R.id.buttonConnect)) != null) AddButton((Button) tmp);
+        // ----------------------------------------- SWITCHES ----------------------------------------
+        if ((tmp = v.findViewById(R.id.switchPorchLight)) != null) AddSwitch((Switch) tmp);
+        if ((tmp = v.findViewById(R.id.switchDoors)) != null) AddSwitch((Switch) tmp);
+        if ((tmp = v.findViewById(R.id.switchSalonLight)) != null) AddSwitch((Switch) tmp);
+        if ((tmp = v.findViewById(R.id.switchSalonHeat)) != null) AddSwitch((Switch) tmp);
+        if ((tmp = v.findViewById(R.id.switchConsole)) != null) AddSwitch((Switch) tmp);
+        // ------------------------------------------ EDITS ------------------------------------------
+        if ((tmp = v.findViewById(R.id.editSocket)) != null) AddEdit((EditText) tmp);
+        if ((tmp = v.findViewById(R.id.editCommand)) != null) AddEdit((EditText) tmp);
+        if ((tmp = v.findViewById(R.id.editLog)) != null) AddEdit((EditText) tmp);
+        // ------------------------------------------ VIEWS ------------------------------------------
+        if ((tmp = v.findViewById(R.id.layoutConsole)) != null) AddView((ViewGroup) tmp);
+        if ((tmp = v.findViewById(R.id.layoutSalon)) != null) AddView((ViewGroup) tmp);
+        if ((tmp = v.findViewById(R.id.layoutPorch)) != null) AddView((ViewGroup) tmp);
+        // ------------------------------------------ LABELS -----------------------------------------
 
         return v;
     }
+	
+	protected void AddButton(Button v)
+	{
+		MainActivity.Buttons.put(v.getId(), v);
+    	MainActivity.Context.SetClickListener(v);
+    	
+    	switch (v.getId())
+    	{
+    		case R.id.buttonSend:
+    			v.setEnabled(false);
+    		break;
+    	}
+	}
+	
+	protected void AddSwitch(Switch v)
+	{
+		MainActivity.Switches.put(v.getId(), v);
+    	MainActivity.Context.SetSwitchListener(v);
+	}
+	
+	protected void AddEdit(EditText v)
+	{
+		MainActivity.Edits.put(v.getId(), v);
+		
+		switch (v.getId())
+    	{
+    		case R.id.editCommand:
+    			MainActivity.Context.SetEditListener(v);
+            	v.setImeActionLabel("Wyślij", KeyEvent.KEYCODE_ENTER);
+    		break;
+    		case R.id.editLog:
+    			v.setKeyListener(null);
+    		break;
+    	}
+	}
+	
+	protected void AddView(ViewGroup v)
+	{
+		MainActivity.Views.put(v.getId(), v);
+		
+		if (v.getId() != R.id.layoutConsole) MainActivity.Context.SetChildsState(v, false);
+	}
+	
+	protected void AddLabel(TextView v)
+	{
+		MainActivity.Labels.put(v.getId(), v);
+	}
 };
