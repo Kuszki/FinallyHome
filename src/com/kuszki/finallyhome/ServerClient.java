@@ -89,7 +89,7 @@ public abstract class ServerClient {
 	{
 		new Thread()
 		{
-			public void run()
+			public synchronized void run()
 			{
 				try {
 					
@@ -113,7 +113,7 @@ public abstract class ServerClient {
 	{
 		new Thread()
 		{
-			public void run()
+			public synchronized void run()
 			{
 				if (socket != null){
 				
