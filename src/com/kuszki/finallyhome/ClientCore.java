@@ -13,6 +13,8 @@ public class ClientCore extends ServerClient
 	protected	Map<String, Integer>		valuesBar		=	new HashMap<String, Integer>();
 	protected	Map<String, Integer>		valuesLabel		=	new HashMap<String, Integer>();
 	
+	protected	Map<Integer, String>		vars			=	new HashMap<Integer, String>();
+	
 	protected	MainActivity 				context			=	null;
 
 	public ClientCore(MainActivity activity)
@@ -32,6 +34,20 @@ public class ClientCore extends ServerClient
 		
 		valuesLabel.put("salon.heat.set", R.id.labelHeatSetValue);
 		valuesLabel.put("salon.heat.current", R.id.labelHeatCurrentValue);
+		
+		vars.put(R.id.switchPorchLight, "porch.light.on");
+		
+		vars.put(R.id.barPorchLight, "porch.light.power");
+		
+		vars.put(R.id.switchDoors, "doors.lock");
+		
+		vars.put(R.id.switchSalonLight, "salon.light.on");
+		vars.put(R.id.switchSalonBlinds, "salon.blinds.on");
+		vars.put(R.id.switchSalonHeat, "salon.heat.on");
+		
+		vars.put(R.id.barSalonLight, "salon.light.power");
+		vars.put(R.id.barSalonBlinds, "salon.blinds.power");
+		vars.put(R.id.barSalonHeat, "salon.heat.set");
 	}
 	
 	@Override
@@ -41,9 +57,6 @@ public class ClientCore extends ServerClient
 		{
 			public void run()
 			{
-				Toast.makeText(context, "Połączono z serwerem", Toast.LENGTH_LONG).show();
-				MainActivity.Edits.get(R.id.editLog).append(" >> Połączono z serwerem\n");
-				
 				MainActivity.Buttons.get(R.id.buttonConnect).setText("Rozłącz");
 				MainActivity.Buttons.get(R.id.buttonSend).setEnabled(true);
 				
@@ -51,6 +64,11 @@ public class ClientCore extends ServerClient
 				context.SetChildsState(MainActivity.Views.get(R.id.layoutPorch), true);
 			}
 		});
+		
+		Msg("Połączono z serwerem");
+		Log(" >> Połączono z serwerem\n");
+		
+		Send("get *\n");
 	}
 
 	@Override
@@ -114,7 +132,8 @@ public class ClientCore extends ServerClient
 	
 	public void onSendButtonClick(View view)
 	{
-		if (socket != null) try {
+		if (socket != null)
+		{
 			
 			final String cmd = MainActivity.Edits.get(R.id.editCommand).getText().toString() + "\n";
 			
@@ -122,11 +141,12 @@ public class ClientCore extends ServerClient
 			
 			MainActivity.Edits.get(R.id.editCommand).setText("");
 			
-		} catch (Exception e) {
-			
-			onError(e);
-		
 		}
+	}
+	
+	public void onChange(int id, int value)
+	{
+		if (vars.keySet().contains(id)) Send("set " + vars.get(id) + " " + (id != R.id.barSalonHeat ? value : (value + 15)) + "\n");
 	}
 	
 	protected void onSetVar(final String var, final Integer value)
@@ -137,9 +157,9 @@ public class ClientCore extends ServerClient
 			{
 				if (valuesSwitch.keySet().contains(var)) MainActivity.Switches.get(valuesSwitch.get(var)).setChecked(value == 1);
 		
-				if (valuesBar.keySet().contains(var)) MainActivity.Bars.get(valuesSwitch.get(var)).setProgress(value);
+				if (valuesBar.keySet().contains(var)) MainActivity.Bars.get(valuesBar.get(var)).setProgress(valuesBar.get(var) != R.id.barSalonHeat ? value : value - 15);
 		
-				if (valuesLabel.keySet().contains(var)) MainActivity.Labels.get(valuesSwitch.get(var)).setText(value.toString() + " °C");
+				if (valuesLabel.keySet().contains(var)) MainActivity.Labels.get(valuesLabel.get(var)).setText(value.toString() + " °C");
 			}
 		});
 	}
@@ -172,12 +192,8 @@ public class ClientCore extends ServerClient
 		
 		if (msg[0].contentEquals("set") && count == 2) try {
 			
-			int value = Integer.parseInt(msg[2]);
+			onSetVar(msg[1], Integer.parseInt(msg[2]));
 			
-			//onSetVar(msg[1], value > 15 ? value - 15 : value);
-			
-			Msg("ON SET " + msg[1] + " = " + msg[2]);
-		
 		} catch (Exception e) {
 			
 			Log("Nieudana interpretacja 'set'");
@@ -185,9 +201,5 @@ public class ClientCore extends ServerClient
 		}
 	}
 	
-	protected void RefreshData()
-	{  	
-	  	Send("get *");
-	}
 
 }
