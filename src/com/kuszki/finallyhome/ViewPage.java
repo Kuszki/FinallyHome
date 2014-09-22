@@ -13,11 +13,20 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 
-public class ViewPage extends Fragment
+/*! \brief Implementacja klasy pojedyńczej strony.
+ * 
+ *  Klasa stanowi wzór dla strony layoutu umieszczonej w pagerze.
+ * 
+ */ public class ViewPage extends Fragment
 {
-	private	final	int			view;
+	private	final	int			view;	//!< Indeks strony.
 	
-	public ViewPage(int index)
+/*! \brief Zdarzenie wywoływane przy odznaczeniu zakładki.
+ *  \param [in] index Numer strony.
+ * 
+ *  Ustala indeks strony na podstawie numeru zasobu.
+ * 
+ */ public ViewPage(int index)
 	{
 		switch (index)
 		{
@@ -34,8 +43,14 @@ public class ViewPage extends Fragment
 		}
 	}
 	
-	@Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+/*! \brief Zdarzenie wywoływane przy tworzeniu strony.
+ *  \param [in] inflater Inflater layoutu.
+ *  \param [in] container Kontener nadrzędny.
+ *  \param [in] savedInstanceState Zapisany stan instancji.
+ * 
+ *  Inicjuje wszystkie kontenery na widgety w instancji klasy MainActivity.
+ * 
+ */ @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View v = inflater.inflate(view, container, false);
         
@@ -71,7 +86,12 @@ public class ViewPage extends Fragment
         return v;
     }
 	
-	protected void AddButton(Button v)
+/*! \brief Dodaje nowy przycisk do kontenera MainActivity.
+ *  \param [in] v Widget do dodania.
+ * 
+ *  Dodaje nowy przycisk do kontenera przechowującego widgety i ustala jego podstawowe parametry.
+ * 
+ */ protected void AddButton(Button v)
 	{
 		MainActivity.Buttons.put(v.getId(), v);
     	MainActivity.Context.SetClickListener(v);
@@ -84,7 +104,12 @@ public class ViewPage extends Fragment
     	}
 	}
 	
-	protected void AddSwitch(Switch v)
+ /*! \brief Dodaje nowy przycisk do kontenera MainActivity.
+  *  \param [in] v Widget do dodania.
+  * 
+  *  Dodaje nowy przycisk do kontenera przechowującego widgety i ustala jego podstawowe parametry.
+  * 
+  */ protected void AddSwitch(Switch v)
 	{
 		MainActivity.Switches.put(v.getId(), v);
     	
@@ -99,7 +124,12 @@ public class ViewPage extends Fragment
 		}
 	}
 	
-	protected void AddEdit(EditText v)
+/*! \brief Dodaje nowe pole tekstowe do kontenera MainActivity.
+ *  \param [in] v Widget do dodania.
+ * 
+ *  Dodaje nowe pole tekstowe do kontenera przechowującego widgety i ustala jego podstawowe parametry.
+ * 
+ */ protected void AddEdit(EditText v)
 	{
 		MainActivity.Edits.put(v.getId(), v);
 		
@@ -115,19 +145,34 @@ public class ViewPage extends Fragment
     	}
 	}
 	
-	protected void AddView(ViewGroup v)
+/*! \brief Dodaje nowy layout do kontenera MainActivity.
+ *  \param [in] v Widget do dodania.
+ * 
+ *  Dodaje nowy layout do kontenera przechowującego widgety i ustala jego podstawowe parametry.
+ * 
+ */ protected void AddView(ViewGroup v)
 	{
 		MainActivity.Views.put(v.getId(), v);
 		
 		if (v.getId() != R.id.layoutConsole) MainActivity.Context.SetChildsState(v, false);
 	}
 	
-	protected void AddLabel(TextView v)
+/*! \brief Dodaje nową etykietę do kontenera MainActivity.
+ *  \param [in] v Widget do dodania.
+ * 
+ *  Dodaje nową etykietę do kontenera przechowującego widgety i ustala jej podstawowe parametry.
+ * 
+ */ protected void AddLabel(TextView v)
 	{
 		MainActivity.Labels.put(v.getId(), v);
 	}
 	
-	protected void AddBar(SeekBar v)
+/*! \brief Dodaje nowy pasek do kontenera MainActivity.
+ *  \param [in] v Widget do dodania.
+ * 
+ *  Dodaje nowy pasek do kontenera przechowującego widgety i ustala jego podstawowe parametry.
+ * 
+ */ protected void AddBar(SeekBar v)
 	{
 		MainActivity.Bars.put(v.getId(), v);
 		

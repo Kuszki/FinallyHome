@@ -6,32 +6,50 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 
-public abstract class ServerClient {
+/*! \brief Klasa implementująca podstawowe mechanizmy połączenia z serwerem.
+ * 
+ *  Stanowi bazę dla klasy ClientCore.
+ * 
+ */ public abstract class ServerClient {
 	
-	protected		Socket 			socket		=	null;
+	protected		Socket 			socket		=	null;		//!< Instancja gniazda.
 	
-	protected		PrintWriter		out			=	null;
-	protected		BufferedReader	in			=	null;
+	protected		PrintWriter		out			=	null;		//!< Strumień wyjścia.
+	protected		BufferedReader	in			=	null;		//!< Bufor wejścia.
 	
-	protected		SockThread		thread		=	null;
+	protected		SockThread		thread		=	null;		//!< Wątek słuchający połączenia.
 	
-	protected final	String			prompt		=	"\r\n$: ";
+	protected final	String			prompt		=	"\r\n$: ";	//!< Znak zachęty, używany do wycięcia go z wiadomości odczytywanych z serwera.
 	
-	protected class	SockThread extends Thread
+/*! \brief Klasa wątku socketa.
+ * 
+ *  Zawiera implementacje wątku obsługującego połączenie i nasluchiwanie odbioru danych.
+ * 
+ */ protected class	SockThread extends Thread
 	{
 		
-		private			boolean	bContinue = true;
+		private			boolean	bContinue = true;	//!< Zmienna decydująca o kontynuacji nasłuchiwania.
 		
-		private final	String	sAddr;
-		private final	int		uPort;
+		private final	String	sAddr;				//!< Adres serwera.
+		private final	int		uPort;				//!< Numer portu.
 		
-		public SockThread(String adress, int port)
+	/*! \brief Konstruktor.
+	 *  \param [in] adress Adres do połączenia.
+	 *  \param [in] port Port połączenia.
+	 * 
+	 *  Ustala dane połączenia.
+	 * 
+	 */ public SockThread(String adress, int port)
 		{
 			sAddr = adress;
 			uPort = port;
 		}
 		
-		public void run()
+	/*! \brief Procedura wątku.
+	 * 
+	 *  Parsuje wiadomość i przekazuje ją do interpreteraUruchamiana wraz z rozpoczęciem pracy wątku. Przeznaczona do odbierania i przekazywania do parsera wiadomości.
+	 * 
+	 */ public void run()
 		{
 			
 			try {
@@ -75,7 +93,13 @@ public abstract class ServerClient {
 	    };
 	};
 
-	public void Connect(String addr, int port)
+/*! \brief Metoda nawiązująca połączenie.
+ *  \param [in] addr Adres połączenia.
+ *  \param [in] port Port połączenia.
+ * 
+ *  Tworzy mowy wątek słuchający o ile nie utworzono jeszcze takiego.
+ * 
+ */ public void Connect(String addr, int port)
 	{		
 		if (thread == null)
 		{
@@ -85,7 +109,11 @@ public abstract class ServerClient {
 		}
 	}
   
-	public void Disconnect()
+/*! \brief Zrywa połączenie.
+ * 
+ *  Kończy połączenie i zeruje wszystkie wykorzystywane w nim obiekty.
+ * 
+ */ public void Disconnect()
 	{
 		new Thread()
 		{
@@ -109,7 +137,14 @@ public abstract class ServerClient {
 		}.start();
   	}
 
-	public void Send(final String message)
+/*! \brief Wysyła wiadomość do serwera.
+ *  \param [in] message Wiadomość do wysłania.
+ *  \warning Znak nowej linii należy dodać ręcznie.
+ *  \note Wątek wymusza synchronizację.
+ * 
+ *  Wysyła do serwera wiadomość o ile połączenie zostało nawiązane i jest aktywne.
+ * 
+ */ public void Send(final String message)
 	{
 		new Thread()
 		{
@@ -128,13 +163,31 @@ public abstract class ServerClient {
 		}.start();
 	}
 	
-	public abstract void onConnect();
+/*! \brief Zdarzenie wywoływane przy połączeniu.
+ * 
+ *  Ustala odpowiedni stan widgetów i wyświetla powiadomienie o połączeniu.
+ * 
+ */ public abstract void onConnect();
 	
-	public abstract void onDisconnect();
+/*! \brief Zdarzenie wywoływane przy rozłączeniu.
+ * 
+ *  Ustawia odpowiedni stan widgetów i wyświatla komunikat o rozłączeniu.
+ * 
+ */ public abstract void onDisconnect();
 	
-	public abstract void onRead(String msg);
+/*! \brief Zdarzenie wywoływane przy odebraniu wiadomości.
+ *  \param [in] msg Odebrana wiadomość.
+ * 
+ *  Parsuje wiadomość i przekazuje ją do interpretera.
+ * 
+ */ public abstract void onRead(String msg);
 	
-	public abstract void onError(Exception e);
+/*! \brief Wyświetla komunikat o wyjątku.
+ *  \param [in] e Złapany wyjątek.
+ * 
+ *  Tworzy powiadomienie o wyłapanym wyjątku i wyświetla je na ekranie w wątku UI.
+ * 
+ */ public abstract void onError(Exception e);
   
 }
 

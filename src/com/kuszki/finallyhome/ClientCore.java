@@ -6,18 +6,27 @@ import java.util.Map;
 import android.view.View;
 import android.widget.Toast;
 
-public class ClientCore extends ServerClient
+/*! \brief Klasa główna klienta serwera.
+ * 
+ *  Odpowiada za komunikację powmiędzy serwerem a klientem. Stanowi rozszerzenie klasy ServerClient.
+ * 
+ */ public class ClientCore extends ServerClient
 {
 	
-	protected	Map<String, Integer>		valuesSwitch	=	new HashMap<String, Integer>();
-	protected	Map<String, Integer>		valuesBar		=	new HashMap<String, Integer>();
-	protected	Map<String, Integer>		valuesLabel		=	new HashMap<String, Integer>();
+	protected final Map<String, Integer>		valuesSwitch	=	new HashMap<String, Integer>();	//!< Kontener na wartości powiązane z przełącznikami.
+	protected final Map<String, Integer>		valuesBar		=	new HashMap<String, Integer>();	//!< Kontener na wartości powiązane z paskami przewijania.
+	protected final Map<String, Integer>		valuesLabel		=	new HashMap<String, Integer>();	//!< Kontener na wartości powiązane z etykietami.
 	
-	protected	Map<Integer, String>		vars			=	new HashMap<Integer, String>();
+	protected final Map<Integer, String>		vars			=	new HashMap<Integer, String>();	//!< Mapa wiążąca zmienne wraz z identyfikatorami ich kontrolek.
 	
-	protected	MainActivity 				context			=	null;
+	protected	MainActivity 				context			=	null;							//!< Referencja do głównej aktywności.
 
-	public ClientCore(MainActivity activity)
+/*! \brief Konstruktor.
+ *  \param [in] activity Referencja do instancji MainActivity.
+ * 
+ *  Wpisuje wartości do wszystkich map.
+ * 
+ */ public ClientCore(MainActivity activity)
 	{
 		context = activity;
 		
@@ -50,8 +59,7 @@ public class ClientCore extends ServerClient
 		vars.put(R.id.barSalonHeat, "salon.heat.set");
 	}
 	
-	@Override
-	public void onConnect()
+    @Override public void onConnect()
 	{
 		context.runOnUiThread(new Runnable()
 		{
@@ -71,8 +79,7 @@ public class ClientCore extends ServerClient
 		Send("get *\n");
 	}
 
-	@Override
-	public void onDisconnect()
+    @Override public void onDisconnect()
 	{
 		context.runOnUiThread(new Runnable()
 		{
@@ -90,8 +97,7 @@ public class ClientCore extends ServerClient
 		Log(" >> Rozłączono z serwerem\n");
 	}
 	
-	@Override
-	public void onRead(String msg)
+    @Override public void onRead(String msg)
 	{
 		if (msg.charAt(0) < 127)
 		{
@@ -107,13 +113,17 @@ public class ClientCore extends ServerClient
 		}
 	}
 	
-	@Override
-	public void onError(final Exception e)
+	@Override public void onError(final Exception e)
 	{
 		Msg(e.getClass().getName() + ": " + e.getMessage());
 	}
 	
-	public void onConnectButtonClick(View view)
+/*! \brief Zdarzenie wywoływane przy wciśnięciu przycisku "połącz".
+ *  \param [in] view Kontrolka wywołująca zdarzenie.
+ * 
+ *  Przetwarza wpisane parametry połączenia i usiłuje połączyć się z serwerem.
+ * 
+ */ public void onConnectButtonClick(View view)
 	{
 		
 		if (socket == null) try {
@@ -130,7 +140,12 @@ public class ClientCore extends ServerClient
 
 	}
 	
-	public void onSendButtonClick(View view)
+/*! \brief Zdarzenie wywoływane przy wciśnięciu przycisku "wyślij".
+ *  \param [in] view Kontrolka wywołująca zdarzenie.
+ * 
+ *  Pobiera polecenie z pola tekstowego i wysyła je do serwera, a następnie czyści pole tekstowe.
+ * 
+ */ public void onSendButtonClick(View view)
 	{
 		if (socket != null)
 		{
@@ -144,12 +159,24 @@ public class ClientCore extends ServerClient
 		}
 	}
 	
-	public void onChange(int id, int value)
+/*! \brief Zdarzenie wywoływane przy edycji zmiennej ze strony klienta.
+ *  \param [in] id Nazwa zmiennej.
+ *  \param [in] value Nowa wartość zmiennej.
+ * 
+ *  Generuje wiadomość do serwera i wysyła ją.
+ * 
+ */ public void onChange(int id, int value)
 	{
 		if (vars.keySet().contains(id)) Send("set " + vars.get(id) + " " + (id != R.id.barSalonHeat ? value : (value + 15)) + "\n");
 	}
 	
-	protected void onSetVar(final String var, final Integer value)
+/*! \brief Zdarzenie wywoływane przy edycji zmiennej ze strony serwera.
+ *  \param [in] var Nazwa zmiennej.
+ *  \param [in] value Nowa wartość zmiennej.
+ * 
+ *  Przeszukuje powiązane ze zmienną kontrolki i ustala ich stan.
+ * 
+ */ protected void onSetVar(final String var, final Integer value)
 	{
 		context.runOnUiThread(new Runnable()
 		{
@@ -164,7 +191,12 @@ public class ClientCore extends ServerClient
 		});
 	}
 	
-	protected void Log(final String msg)
+/*! \brief Tworzy wpis w logu konsoli.
+ *  \param [in] msg Wiadomość do wyświetlenia.
+ * 
+ *  Wpisuje do pola konsoli nową wiadomość w wątku UI.
+ * 
+ */ protected void Log(final String msg)
 	{
 		context.runOnUiThread(new Runnable()
 		{
@@ -175,7 +207,12 @@ public class ClientCore extends ServerClient
 		});
 	}
 	
-	protected void Msg(final String msg)
+/*! \brief Tworzy nowe powiadomienie i wyświetla je na ekranie.
+ *  \param [in] msg Wiadomość do wyświetlenia.
+ * 
+ *  Wyświetla tekst używając wątku UI.
+ * 
+ */ protected void Msg(final String msg)
 	{
 		context.runOnUiThread(new Runnable()
 		{
@@ -186,7 +223,12 @@ public class ClientCore extends ServerClient
 		});
 	}
 	
-	protected void Interpret(final String[] msg)
+/*! \brief Interpretuje polecenie.
+ *  \param [in] msg Kolejne składniki polecenia.
+ * 
+ *  Interpretuje wiadomość używając kolejnych słów z jej treści.
+ * 
+ */ protected void Interpret(final String[] msg)
 	{
 		final int count = msg.length - 1;
 		

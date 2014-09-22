@@ -21,25 +21,29 @@ import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
-public class MainActivity extends FragmentActivity
+/*! \brief Główna aktywność
+ * 
+ *  Odpowiada za przechowywanie wszystkich używanych widgetów, wyświetlanie głównego pagera oraz obsługę zdarzeń widgetów. Działa w trybie singletona i posiada statyczne pole reprezentujące swoją unikatową instancję.
+ * 
+ */ public class MainActivity extends FragmentActivity
 {
 
-	public static	MainActivity 			Context			=	null;
+	public static	MainActivity 			Context			=	null;								//!< Referencja instancji klasy.
 	
-	public static	Map<Integer, EditText>	Edits			=	new HashMap<Integer, EditText>();
-	public static	Map<Integer, Button>	Buttons			=	new HashMap<Integer, Button>();
-	public static	Map<Integer, Switch>	Switches		=	new HashMap<Integer, Switch>();
-	public static	Map<Integer, ViewGroup>	Views			=	new HashMap<Integer, ViewGroup>();
-	public static	Map<Integer, TextView>	Labels			=	new HashMap<Integer, TextView>();
-	public static	Map<Integer, SeekBar>	Bars			=	new HashMap<Integer, SeekBar>();
+	public static	Map<Integer, EditText>	Edits			=	new HashMap<Integer, EditText>();	//!< Kontener na pola tekstowe.
+	public static	Map<Integer, Button>	Buttons			=	new HashMap<Integer, Button>();		//!< Kontener na przyciski.
+	public static	Map<Integer, Switch>	Switches		=	new HashMap<Integer, Switch>();		//!< Kontener na przełączniki.
+	public static	Map<Integer, ViewGroup>	Views			=	new HashMap<Integer, ViewGroup>();	//!< Kontener na sizery.
+	public static	Map<Integer, TextView>	Labels			=	new HashMap<Integer, TextView>();	//!< Kontener na etykiety.
+	public static	Map<Integer, SeekBar>	Bars			=	new HashMap<Integer, SeekBar>();	//!< Kontener na paski przewijania.
 	
-	private			String[]				titles			=	null;
+	private			String[]				titles			=	null;								//!< Tablica przechowująca tytuły zakładek.
 	
-    private			ViewPager				pager			=	null;
-    private			ActionBar				bar				=	null;
-    private 		TabsWidget				taber			=	null;
+    private			ViewPager				pager			=	null;								//!< Instancja pagera.
+    private			ActionBar				bar				=	null;								//!< Instancja paska akcji.
+    private 		TabsWidget				taber			=	null;								//!< Instancja tabera.
     
-    private 		ClientCore				client			=	null;
+    private 		ClientCore				client			=	null;								//!< Instancja klienta.
     
     public 			OnClickListener 					clickListener	=	new OnClickListener()
     {
@@ -59,7 +63,7 @@ public class MainActivity extends FragmentActivity
 			}
 	    }
     	
-	};
+	}; //!< Obiekt nasłuchujący zdarzeń kliknięcia.
 	
 	public			OnCheckedChangeListener 			switchListener	=	new OnCheckedChangeListener()
 	{
@@ -75,7 +79,7 @@ public class MainActivity extends FragmentActivity
 			}
 		}
 	
-	};
+	}; //!< Obiekt nasłuchujący zdarzeń zmiany stanu przełącznika.
 	
 	public			OnKeyListener						editListener	=	new OnKeyListener()
 	{
@@ -92,7 +96,7 @@ public class MainActivity extends FragmentActivity
 	        return false;
 	    }
 	
-	};
+	}; //!< Obiekt nasłuchujący zdarzeń naciśnięcia klawisza.
 	
 	public			SeekBar.OnSeekBarChangeListener		seekListener	=	new SeekBar.OnSeekBarChangeListener() {
 
@@ -105,29 +109,57 @@ public class MainActivity extends FragmentActivity
         	client.onChange(v.getId(), v.getProgress());
         }
 
-    };
+    }; //!< Obiekt nasłuchujący zmiany położenia paska przewijania.
 	
-	public void SetClickListener(View v)
+/*! \brief Ustawienie obiektu słuchającego dla zdarzeń kliknięcia.
+ *  \param [in] v Instancja widgetu do nastawienia.
+ * 
+ *  Ustala nowy obiekt słuchający na instancję obiektu MainActivity::clickListener.
+ * 
+ */ public void SetClickListener(View v)
 	{
 		if (v != null) v.setOnClickListener(clickListener);
 	}
 	
-	public void SetSwitchListener(Switch v)
+ /*! \brief Ustawienie obiektu słuchającego dla zdarzeń zmiany stanu przełącznika.
+  *  \param [in] v Instancja widgetu do nastawienia.
+  * 
+  *  Ustala nowy obiekt słuchający na instancję obiektu MainActivity::switchListener.
+  * 
+  */ public void SetSwitchListener(Switch v)
 	{
 		if (v != null) v.setOnCheckedChangeListener(switchListener);
 	}
 	
-	public void SetEditListener(EditText v)
+/*! \brief Ustawienie obiektu słuchającego dla zdarzeń wciśnięcia klawisza.
+ *  \param [in] v Instancja widgetu do nastawienia.
+ * 
+ *  Ustala nowy obiekt słuchający na instancję obiektu MainActivity::editListener.
+ * 
+ */ public void SetEditListener(EditText v)
 	{
 		if (v != null) v.setOnKeyListener(editListener);
 	}
 	
-	public void SetSeekListener(SeekBar v)
+/*! \brief Ustawienie obiektu słuchającego dla zdarzeń zmiany stanu paska przewijania.
+ *  \param [in] v Instancja widgetu do nastawienia.
+ * 
+ *  Ustala nowy obiekt słuchający na instancję obiektu MainActivity::seekListener.
+ * 
+ */ public void SetSeekListener(SeekBar v)
 	{
 		if (v != null) v.setOnSeekBarChangeListener(seekListener);
 	}
 	
-	public void SetChildsState(ViewGroup v, boolean state)
+/*! \brief Ustala stan wszystkich kontrolek w danym layoucie na wybrany w parametrze.
+ *  \param [in] v Instancja widgetu do nastawienia.
+ *  \param [in] state Stan kontrolki:
+ *                    true - aktywna,
+ *                    false - niekatywna.
+ * 
+ *  Ustala nowy obiekt słuchający na instancję obiektu MainActivity::switchListener.
+ * 
+ */ public void SetChildsState(ViewGroup v, boolean state)
 	{
 		
 		for (int i = 0; i < v.getChildCount(); i++)
@@ -137,8 +169,12 @@ public class MainActivity extends FragmentActivity
 		}
 	}
     
-    @Override
-    protected void onCreate(Bundle savedInstanceState)
+/*! \brief Zdarzenie wywoływane przy tworzeniu aktywności.
+ *  \param [in] savedInstanceState Parametry zapisanej wcześniej instancji.
+ * 
+ *  Ustala nowy obiekt słuchający na instancję obiektu MainActivity::switchListener.
+ * 
+ */ @Override protected void onCreate(Bundle savedInstanceState)
     {
 
     	super.onCreate(savedInstanceState);
