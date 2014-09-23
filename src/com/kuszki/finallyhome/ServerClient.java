@@ -82,6 +82,8 @@ import java.net.Socket;
 					
 				}
 				
+				socket = null;
+				
 				onDisconnect();
 
 			} catch (Exception e) {
@@ -101,7 +103,7 @@ import java.net.Socket;
  * 
  */ public void Connect(String addr, int port)
 	{		
-		if (thread == null)
+		if (socket == null)
 		{
 			thread = new SockThread(addr, port);
 			
