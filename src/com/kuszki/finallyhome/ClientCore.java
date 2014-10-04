@@ -1,3 +1,7 @@
+/*! \file
+    \brief Plik zawierający implementacje klasy ClientCore.
+*/
+
 package com.kuszki.finallyhome;
 
 import java.util.HashMap;
@@ -10,7 +14,8 @@ import android.widget.Toast;
  * 
  *  Odpowiada za komunikację powmiędzy serwerem a klientem. Stanowi rozszerzenie klasy ServerClient.
  * 
- */ public class ClientCore extends ServerClient
+ */
+public class ClientCore extends ServerClient
 {
 	
 	protected final Map<String, Integer>		valuesSwitch	=	new HashMap<String, Integer>();	//!< Kontener na wartości powiązane z przełącznikami.
@@ -21,12 +26,13 @@ import android.widget.Toast;
 	
 	protected	MainActivity 				context			=	null;							//!< Referencja do głównej aktywności.
 
-/*! \brief Konstruktor.
- *  \param [in] activity Referencja do instancji MainActivity.
- * 
- *  Wpisuje wartości do wszystkich map.
- * 
- */ public ClientCore(MainActivity activity)
+	/*! \brief Konstruktor.
+	 *  \param [in] activity Referencja do instancji MainActivity.
+	 * 
+	 *  Wpisuje wartości do wszystkich map.
+	 * 
+	 */
+	public ClientCore(MainActivity activity)
 	{
 		context = activity;
 		
@@ -118,12 +124,13 @@ import android.widget.Toast;
 		Msg(e.getClass().getName() + ": " + e.getMessage());
 	}
 	
-/*! \brief Zdarzenie wywoływane przy wciśnięciu przycisku "połącz".
- *  \param [in] view Kontrolka wywołująca zdarzenie.
- * 
- *  Przetwarza wpisane parametry połączenia i usiłuje połączyć się z serwerem.
- * 
- */ public void onConnectButtonClick(View view)
+	/*! \brief Zdarzenie wywoływane przy wciśnięciu przycisku "połącz".
+	 *  \param [in] view Kontrolka wywołująca zdarzenie.
+	 * 
+	 *  Przetwarza wpisane parametry połączenia i usiłuje połączyć się z serwerem.
+	 * 
+	 */
+	public void onConnectButtonClick(View view)
 	{
 		
 		if (socket == null) try {
@@ -140,12 +147,13 @@ import android.widget.Toast;
 
 	}
 	
-/*! \brief Zdarzenie wywoływane przy wciśnięciu przycisku "wyślij".
- *  \param [in] view Kontrolka wywołująca zdarzenie.
- * 
- *  Pobiera polecenie z pola tekstowego i wysyła je do serwera, a następnie czyści pole tekstowe.
- * 
- */ public void onSendButtonClick(View view)
+	/*! \brief Zdarzenie wywoływane przy wciśnięciu przycisku "wyślij".
+	 *  \param [in] view Kontrolka wywołująca zdarzenie.
+	 * 
+	 *  Pobiera polecenie z pola tekstowego i wysyła je do serwera, a następnie czyści pole tekstowe.
+	 * 
+	 */
+	public void onSendButtonClick(View view)
 	{
 		if (socket != null)
 		{
@@ -159,24 +167,26 @@ import android.widget.Toast;
 		}
 	}
 	
-/*! \brief Zdarzenie wywoływane przy edycji zmiennej ze strony klienta.
- *  \param [in] id Nazwa zmiennej.
- *  \param [in] value Nowa wartość zmiennej.
- * 
- *  Generuje wiadomość do serwera i wysyła ją.
- * 
- */ public void onChange(int id, int value)
+	/*! \brief Zdarzenie wywoływane przy edycji zmiennej ze strony klienta.
+	 *  \param [in] id Nazwa zmiennej.
+	 *  \param [in] value Nowa wartość zmiennej.
+	 * 
+	 *  Generuje wiadomość do serwera i wysyła ją.
+	 * 
+	 */
+	public void onChange(int id, int value)
 	{
 		if (vars.keySet().contains(id)) Send("set " + vars.get(id) + " " + (id != R.id.barSalonHeat ? value : (value + 15)) + "\n");
 	}
 	
-/*! \brief Zdarzenie wywoływane przy edycji zmiennej ze strony serwera.
- *  \param [in] var Nazwa zmiennej.
- *  \param [in] value Nowa wartość zmiennej.
- * 
- *  Przeszukuje powiązane ze zmienną kontrolki i ustala ich stan.
- * 
- */ protected void onSetVar(final String var, final Integer value)
+	/*! \brief Zdarzenie wywoływane przy edycji zmiennej ze strony serwera.
+	 *  \param [in] var Nazwa zmiennej.
+	 *  \param [in] value Nowa wartość zmiennej.
+	 * 
+	 *  Przeszukuje powiązane ze zmienną kontrolki i ustala ich stan.
+	 * 
+	 */
+	protected void onSetVar(final String var, final Integer value)
 	{
 		context.runOnUiThread(new Runnable()
 		{
@@ -191,12 +201,13 @@ import android.widget.Toast;
 		});
 	}
 	
-/*! \brief Tworzy wpis w logu konsoli.
- *  \param [in] msg Wiadomość do wyświetlenia.
- * 
- *  Wpisuje do pola konsoli nową wiadomość w wątku UI.
- * 
- */ protected void Log(final String msg)
+	/*! \brief Tworzy wpis w logu konsoli.
+	 *  \param [in] msg Wiadomość do wyświetlenia.
+	 * 
+	 *  Wpisuje do pola konsoli nową wiadomość w wątku UI.
+	 * 
+	 */
+	protected void Log(final String msg)
 	{
 		context.runOnUiThread(new Runnable()
 		{
@@ -207,12 +218,13 @@ import android.widget.Toast;
 		});
 	}
 	
-/*! \brief Tworzy nowe powiadomienie i wyświetla je na ekranie.
- *  \param [in] msg Wiadomość do wyświetlenia.
- * 
- *  Wyświetla tekst używając wątku UI.
- * 
- */ protected void Msg(final String msg)
+	/*! \brief Tworzy nowe powiadomienie i wyświetla je na ekranie.
+	 *  \param [in] msg Wiadomość do wyświetlenia.
+	 * 
+	 *  Wyświetla tekst używając wątku UI.
+	 * 
+	 */
+	protected void Msg(final String msg)
 	{
 		context.runOnUiThread(new Runnable()
 		{
@@ -223,12 +235,13 @@ import android.widget.Toast;
 		});
 	}
 	
-/*! \brief Interpretuje polecenie.
- *  \param [in] msg Kolejne składniki polecenia.
- * 
- *  Interpretuje wiadomość używając kolejnych słów z jej treści.
- * 
- */ protected void Interpret(final String[] msg)
+	/*! \brief Interpretuje polecenie.
+	 *  \param [in] msg Kolejne składniki polecenia.
+	 * 
+	 *  Interpretuje wiadomość używając kolejnych słów z jej treści.
+	 * 
+	 */
+	protected void Interpret(final String[] msg)
 	{
 		final int count = msg.length - 1;
 		

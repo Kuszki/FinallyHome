@@ -1,3 +1,7 @@
+/*! \file
+    \brief Plik zawierający implementacje klasy MainActivity.
+*/
+
 package com.kuszki.finallyhome;
 
 import java.util.HashMap;
@@ -25,7 +29,8 @@ import android.widget.TextView;
  * 
  *  Odpowiada za przechowywanie wszystkich używanych widgetów, wyświetlanie głównego pagera oraz obsługę zdarzeń widgetów. Działa w trybie singletona i posiada statyczne pole reprezentujące swoją unikatową instancję.
  * 
- */ public class MainActivity extends FragmentActivity
+ */
+public class MainActivity extends FragmentActivity
 {
 
 	public static	MainActivity 			Context			=	null;								//!< Referencja instancji klasy.
@@ -111,55 +116,60 @@ import android.widget.TextView;
 
     }; //!< Obiekt nasłuchujący zmiany położenia paska przewijania.
 	
-/*! \brief Ustawienie obiektu słuchającego dla zdarzeń kliknięcia.
- *  \param [in] v Instancja widgetu do nastawienia.
- * 
- *  Ustala nowy obiekt słuchający na instancję obiektu MainActivity::clickListener.
- * 
- */ public void SetClickListener(View v)
+    /*! \brief Ustawienie obiektu słuchającego dla zdarzeń kliknięcia.
+     *  \param [in] v Instancja widgetu do nastawienia.
+     * 
+     *  Ustala nowy obiekt słuchający na instancję obiektu MainActivity::clickListener.
+     * 
+     */
+    public void SetClickListener(View v)
 	{
 		if (v != null) v.setOnClickListener(clickListener);
 	}
 	
- /*! \brief Ustawienie obiektu słuchającego dla zdarzeń zmiany stanu przełącznika.
-  *  \param [in] v Instancja widgetu do nastawienia.
-  * 
-  *  Ustala nowy obiekt słuchający na instancję obiektu MainActivity::switchListener.
-  * 
-  */ public void SetSwitchListener(Switch v)
+    /*! \brief Ustawienie obiektu słuchającego dla zdarzeń zmiany stanu przełącznika.
+     *  \param [in] v Instancja widgetu do nastawienia.
+     * 
+     *  Ustala nowy obiekt słuchający na instancję obiektu MainActivity::switchListener.
+     * 
+     */
+    public void SetSwitchListener(Switch v)
 	{
 		if (v != null) v.setOnCheckedChangeListener(switchListener);
 	}
 	
-/*! \brief Ustawienie obiektu słuchającego dla zdarzeń wciśnięcia klawisza.
- *  \param [in] v Instancja widgetu do nastawienia.
- * 
- *  Ustala nowy obiekt słuchający na instancję obiektu MainActivity::editListener.
- * 
- */ public void SetEditListener(EditText v)
+    /*! \brief Ustawienie obiektu słuchającego dla zdarzeń wciśnięcia klawisza.
+     *  \param [in] v Instancja widgetu do nastawienia.
+     * 
+     *  Ustala nowy obiekt słuchający na instancję obiektu MainActivity::editListener.
+     * 
+     */
+    public void SetEditListener(EditText v)
 	{
 		if (v != null) v.setOnKeyListener(editListener);
 	}
 	
-/*! \brief Ustawienie obiektu słuchającego dla zdarzeń zmiany stanu paska przewijania.
- *  \param [in] v Instancja widgetu do nastawienia.
- * 
- *  Ustala nowy obiekt słuchający na instancję obiektu MainActivity::seekListener.
- * 
- */ public void SetSeekListener(SeekBar v)
+    /*! \brief Ustawienie obiektu słuchającego dla zdarzeń zmiany stanu paska przewijania.
+     *  \param [in] v Instancja widgetu do nastawienia.
+     * 
+     *  Ustala nowy obiekt słuchający na instancję obiektu MainActivity::seekListener.
+     * 
+     */
+    public void SetSeekListener(SeekBar v)
 	{
 		if (v != null) v.setOnSeekBarChangeListener(seekListener);
 	}
 	
-/*! \brief Ustala stan wszystkich kontrolek w danym layoucie na wybrany w parametrze.
- *  \param [in] v Instancja widgetu do nastawienia.
- *  \param [in] state Stan kontrolki:
- *                    true - aktywna,
- *                    false - niekatywna.
- * 
- *  Ustala nowy obiekt słuchający na instancję obiektu MainActivity::switchListener.
- * 
- */ public void SetChildsState(ViewGroup v, boolean state)
+    /*! \brief Ustala stan wszystkich kontrolek w danym layoucie na wybrany w parametrze.
+     *  \param [in] v Instancja widgetu do nastawienia.
+     *  \param [in] state Stan kontrolki:
+     *                    true - aktywna,
+     *                    false - niekatywna.
+     * 
+     *  Ustala nowy obiekt słuchający na instancję obiektu MainActivity::switchListener.
+     * 
+     */
+    public void SetChildsState(ViewGroup v, boolean state)
 	{
 		
 		for (int i = 0; i < v.getChildCount(); i++)
@@ -169,12 +179,13 @@ import android.widget.TextView;
 		}
 	}
     
-/*! \brief Zdarzenie wywoływane przy tworzeniu aktywności.
- *  \param [in] savedInstanceState Parametry zapisanej wcześniej instancji.
- * 
- *  Ustala nowy obiekt słuchający na instancję obiektu MainActivity::switchListener.
- * 
- */ @Override protected void onCreate(Bundle savedInstanceState)
+    /*! \brief Zdarzenie wywoływane przy tworzeniu aktywności.
+     *  \param [in] savedInstanceState Parametry zapisanej wcześniej instancji.
+     * 
+     *  Ustala nowy obiekt słuchający na instancję obiektu MainActivity::switchListener.
+     * 
+     */
+    @Override protected void onCreate(Bundle savedInstanceState)
     {
 
     	super.onCreate(savedInstanceState);
