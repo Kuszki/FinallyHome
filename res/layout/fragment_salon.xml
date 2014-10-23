@@ -26,7 +26,7 @@
                 android:id="@+id/barSalonBlinds"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:max="10"
+                android:max="8"
                 android:progress="0" />
         </LinearLayout>
 
@@ -46,7 +46,7 @@
                 android:id="@+id/barSalonLight"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:max="10"
+                android:max="8"
                 android:progress="0" />
 
         </LinearLayout>
@@ -67,7 +67,7 @@
                 android:id="@+id/barSalonHeat"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:max="20"
+                android:max="15"
                 android:progress="0" />
             
         </LinearLayout>

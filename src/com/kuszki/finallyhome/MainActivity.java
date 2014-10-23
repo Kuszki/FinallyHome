@@ -111,7 +111,7 @@ public class MainActivity extends FragmentActivity
 
         public void onStopTrackingTouch(SeekBar v)
         {
-        	client.onChange(v.getId(), v.getProgress());
+        	client.onChange(v.getId(), v.getProgress() + (v.getId() != R.id.barSalonHeat ? 1 : 15));
         }
 
     }; //!< Obiekt nasłuchujący zmiany położenia paska przewijania.

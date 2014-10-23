@@ -176,7 +176,7 @@ public class ClientCore extends ServerClient
 	 */
 	public void onChange(int id, int value)
 	{
-		if (vars.keySet().contains(id)) Send("set " + vars.get(id) + " " + (id != R.id.barSalonHeat ? value : (value + 15)) + "\n");
+		if (vars.keySet().contains(id)) Send("set " + vars.get(id) + " " + value + "\n");
 	}
 	
 	/*! \brief Zdarzenie wywoływane przy edycji zmiennej ze strony serwera.
@@ -194,7 +194,7 @@ public class ClientCore extends ServerClient
 			{
 				if (valuesSwitch.keySet().contains(var)) MainActivity.Switches.get(valuesSwitch.get(var)).setChecked(value == 1);
 		
-				if (valuesBar.keySet().contains(var)) MainActivity.Bars.get(valuesBar.get(var)).setProgress(valuesBar.get(var) != R.id.barSalonHeat ? value : value - 15);
+				if (valuesBar.keySet().contains(var)) MainActivity.Bars.get(valuesBar.get(var)).setProgress(valuesBar.get(var) != R.id.barSalonHeat ? value - 1 : value - 15);
 		
 				if (valuesLabel.keySet().contains(var)) MainActivity.Labels.get(valuesLabel.get(var)).setText(value.toString() + " °C");
 			}
