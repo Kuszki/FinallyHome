@@ -5,8 +5,6 @@ O projekcie
 ----------
 Program ma za zadanie stanowić klienta dla aplikacji FinallyHome.
 
-Do zbudowania projektu potrzeba stabilnej wersji KuszkAPI.
-
 Licencja
 ----------
 
